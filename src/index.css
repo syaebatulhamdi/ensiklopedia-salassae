@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  /* Mendaftarkan "Google Sans" sebagai font utama (font-sans) */
+  --font-sans: "Google Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
