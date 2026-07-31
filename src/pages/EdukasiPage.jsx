@@ -11,7 +11,7 @@ import Footer from '../components/Footer';
 
 export default function EdukasiPage() {
   const carouselRef = useRef(null);
-  const navContainerRef = useRef(null); // PERBAIKAN: Ref baru untuk wadah navigasi chips
+  const navContainerRef = useRef(null);
   
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -92,7 +92,6 @@ export default function EdukasiPage() {
     }
   }, []);
 
-  // Membaca area mana yang sedang terlihat di layar
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -108,14 +107,12 @@ export default function EdukasiPage() {
     return () => sections.forEach(sec => observer.unobserve(sec));
   }, []);
 
-  // ================= PERBAIKAN: AUTO-SCROLL CHIPS =================
-  // Menggeser kontainer navigasi secara otomatis ketika activeSection berubah
+  // AUTO-SCROLL CHIPS
   useEffect(() => {
     const container = navContainerRef.current;
     const activeChip = document.getElementById(`nav-chip-${activeSection}`);
     
     if (container && activeChip) {
-      // Menghitung posisi agar chip aktif tepat berada di tengah kontainer (berguna untuk layar HP)
       const scrollLeft = activeChip.offsetLeft - container.offsetWidth / 2 + activeChip.offsetWidth / 2;
       container.scrollTo({
         left: scrollLeft,
@@ -123,7 +120,6 @@ export default function EdukasiPage() {
       });
     }
   }, [activeSection]);
-  // ================================================================
 
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -177,7 +173,6 @@ export default function EdukasiPage() {
             </Link>
           </motion.div>
           
-          {/* PERBAIKAN: Menambahkan ref={navContainerRef} dan properti smooth scroll */}
           <div 
             ref={navContainerRef}
             className="flex gap-2.5 overflow-x-auto w-full md:justify-center snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden py-2 scroll-smooth relative"
@@ -185,7 +180,7 @@ export default function EdukasiPage() {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                id={`nav-chip-${item.id}`} // PERBAIKAN: Menambahkan ID unik pada tiap chip
+                id={`nav-chip-${item.id}`}
                 onClick={() => scrollToSection(item.id)}
                 className={`snap-start shrink-0 px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 focus:outline-none ${
                   activeSection === item.id
@@ -203,7 +198,7 @@ export default function EdukasiPage() {
       </div>
       {/* ================================================== */}
 
-      {/* ================= BAGIAN 1: PENGANTAR (Tanpa Shadow) ================= */}
+      {/* ================= BAGIAN 1: PENGANTAR ================= */}
       <div className="bg-[#E9F5E1] pt-12 md:pt-16 pb-20 overflow-hidden">
         
         <div className="px-6 sm:px-8 max-w-7xl mx-auto">
@@ -266,7 +261,7 @@ export default function EdukasiPage() {
       </div>
 
 
-      {/* ================= BAGIAN 2: MANFAAT (Background Putih #FFFFFF) ================= */}
+      {/* ================= BAGIAN 2: MANFAAT ================= */}
       <div className="w-full bg-[#FFFFFF] py-16 lg:py-24">
         <div className="px-6 sm:px-8 max-w-7xl mx-auto">
           <section id="manfaat" className="scroll-mt-24">
@@ -321,7 +316,7 @@ export default function EdukasiPage() {
       </div>
 
 
-      {/* ================= BAGIAN 3: KOMPARASI (Background Abu Muda #F7F8FA) ================= */}
+      {/* ================= BAGIAN 3: KOMPARASI ================= */}
       <div className="w-full bg-[#F7F8FA] py-16 lg:py-24">
         <div className="px-6 sm:px-8 max-w-7xl mx-auto">
           <section id="komparasi" className="scroll-mt-24">
@@ -385,45 +380,82 @@ export default function EdukasiPage() {
       </div>
 
 
-      {/* ================= BAGIAN 4: BAHAN (Background Putih #FFFFFF) ================= */}
-      <div className="w-full bg-[#FFFFFF] py-16 lg:py-24">
+      {/* ================= BAGIAN 4: BAHAN (PERUBAHAN IKON SEPERTI MANFAAT) ================= */}
+      <div className="w-full bg-[#FFFFFF] py-16 lg:py-28">
         <div className="px-6 sm:px-8 max-w-7xl mx-auto">
           <section id="bahan" className="scroll-mt-24">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} custom={0} variants={cardVariants}>
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#fff0e6] rounded-full text-sm font-semibold mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>
-                <span className="text-[#78350f]">Katalog Bahan</span>
-              </div>
-              <h3 className="text-2xl font-extrabold text-[#111827] tracking-tight mb-4">Harta Karun di Sekitar Kita</h3>
-              <p className="text-gray-600 text-base mb-10">Berikut adalah tiga kelompok bahan utama yang mudah ditemukan di Desa Salassae:</p>
-            </motion.div>
+            
+            <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+              
+              {/* SISI KIRI: Headline & Deskripsi */}
+              <motion.div 
+                initial="hidden" 
+                whileInView="visible" 
+                viewport={{ once: true, margin: "-50px" }} 
+                variants={cardVariants} 
+                custom={0}
+                className="w-full lg:w-[35%] lg:sticky lg:top-36"
+              >
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#E9F5E1] border border-[#79CF02]/20 rounded-full text-sm font-semibold mb-6">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#79CF02]"></span>
+                  <span className="text-[#559400]">Katalog Bahan</span>
+                </div>
+                <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111827] tracking-tight mb-5 leading-[1.1]">
+                  Harta Karun <br className="hidden lg:block"/> di Sekitar Kita
+                </h3>
+                <p className="text-gray-500 text-base md:text-lg leading-relaxed">
+                  Berikut adalah tiga kelompok bahan utama yang sangat mudah ditemukan di lingkungan Desa Salassae untuk meracik pupuk alami berkualitas tinggi.
+                </p>
+              </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <motion.div custom={1} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="bg-white p-6 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col items-start">
-                <div className="w-12 h-12 bg-[#E9F5E1] rounded-full flex items-center justify-center mb-4"><FiWind className="w-6 h-6 text-[#559400]" /></div>
-                <h4 className="text-xl font-bold text-[#111827] mb-2">Unsur Hijau (Nitrogen)</h4>
-                <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Mempercepat pertumbuhan daun dan tunas baru pada fase vegetatif.</p>
-                <p className="text-sm font-semibold text-gray-800">Contoh: Daun gamal, lamtoro.</p>
-              </motion.div>
-              <motion.div custom={2} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="bg-white p-6 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col items-start">
-                <div className="w-12 h-12 bg-[#E9F5E1] rounded-full flex items-center justify-center mb-4"><FiSun className="w-6 h-6 text-[#559400]" /></div>
-                <h4 className="text-xl font-bold text-[#111827] mb-2">Unsur Cokelat (Karbon)</h4>
-                <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Memberi energi bagi mikroba tanah dan memperkuat batang.</p>
-                <p className="text-sm font-semibold text-gray-800">Contoh: Sekam padi, jerami.</p>
-              </motion.div>
-              <motion.div custom={3} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="bg-white p-6 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col items-start">
-                <div className="w-12 h-12 bg-[#E9F5E1] rounded-full flex items-center justify-center mb-4"><FiDroplet className="w-6 h-6 text-[#559400]" /></div>
-                <h4 className="text-xl font-bold text-[#111827] mb-2">Starter (Dekomposer)</h4>
-                <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Bahan pemicu yang berisi makanan awal untuk proses fermentasi.</p>
-                <p className="text-sm font-semibold text-gray-800">Contoh: Air cucian beras, gula cair.</p>
-              </motion.div>
+              {/* SISI KANAN: Daftar Kartu Bahan Bertumpuk */}
+              <div className="w-full lg:w-[65%] flex flex-col gap-4 md:gap-5">
+                
+                {/* KARTU 1 (Ikon diperbarui persis seperti bagian Manfaat) */}
+                <motion.div custom={1} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="bg-[#F7F8FA] p-6 md:p-8 rounded-[2rem] border border-transparent flex flex-col sm:flex-row gap-5 md:gap-6 items-start">
+                  <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
+                    <FiWind className="w-6 h-6 md:w-7 md:h-7 text-[#559400]" />
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-[#111827] mb-2">Unsur Hijau (Nitrogen)</h4>
+                    <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Mempercepat pertumbuhan daun dan tunas baru pada fase vegetatif tanaman.</p>
+                    <p className="text-sm font-semibold text-[#79CF02]">Contoh: Daun gamal, lamtoro, sisa sayuran segar.</p>
+                  </div>
+                </motion.div>
+
+                {/* KARTU 2 */}
+                <motion.div custom={2} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="bg-[#F7F8FA] p-6 md:p-8 rounded-[2rem] border border-transparent flex flex-col sm:flex-row gap-5 md:gap-6 items-start">
+                  <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
+                    <FiSun className="w-6 h-6 md:w-7 md:h-7 text-[#559400]" />
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-[#111827] mb-2">Unsur Cokelat (Karbon)</h4>
+                    <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Memberi energi berkelanjutan bagi mikroba tanah, memperkuat batang, dan menjaga porositas tanah.</p>
+                    <p className="text-sm font-semibold text-[#79CF02]">Contoh: Sekam padi, jerami, serbuk gergaji kering.</p>
+                  </div>
+                </motion.div>
+
+                {/* KARTU 3 */}
+                <motion.div custom={3} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="bg-[#F7F8FA] p-6 md:p-8 rounded-[2rem] border border-transparent flex flex-col sm:flex-row gap-5 md:gap-6 items-start">
+                  <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
+                    <FiDroplet className="w-6 h-6 md:w-7 md:h-7 text-[#559400]" />
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-[#111827] mb-2">Starter (Dekomposer)</h4>
+                    <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Bahan pemicu yang berisi bakteri baik dan makanan nutrisi awal untuk mempercepat proses fermentasi.</p>
+                    <p className="text-sm font-semibold text-[#79CF02]">Contoh: Air cucian beras, molase (gula cair), larutan EM4.</p>
+                  </div>
+                </motion.div>
+
+              </div>
+
             </div>
           </section>
         </div>
       </div>
 
 
-      {/* ================= BAGIAN 5: CALL TO ACTION (Background Abu Muda #F7F8FA) ================= */}
+      {/* ================= BAGIAN 5: CALL TO ACTION ================= */}
       <div className="w-full bg-[#F7F8FA] pt-16 pb-24 lg:pt-20 lg:pb-32">
         <div className="px-6 sm:px-8 max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative z-10 w-full">

@@ -1,133 +1,334 @@
-import { useEffect } from 'react'; // PERBAIKAN: Menambahkan useEffect untuk Scroll to Top
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
-import { FiSettings, FiPackage, FiCheck, FiArrowRight } from "react-icons/fi"; // Tambahan FiArrowRight
+import { 
+  FiCheck, FiWind, FiEye, FiThermometer, FiDroplet, FiClock, FiSun, FiRefreshCcw, FiTool, FiPackage
+} from "react-icons/fi";
 import { motion } from 'framer-motion';
 import Footer from '../components/Footer';
 
 export default function PraktikPupukPage() {
-  
-  // Tuliskan blok kode ini tepat di bagian atas dalam komponen Anda
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []); // Array kosong [] memastikan ini hanya berjalan 1 kali saat halaman dibuka
+  }, []);
 
-  const cardVariants = {
+  const fadeIn = {
     hidden: { opacity: 0, y: 20 },
-    visible: (index) => ({
-      opacity: 1, y: 0,
-      transition: { delay: index * 0.15, duration: 0.6, type: "spring" }
-    })
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
   };
 
+  const steps = [
+    {
+      id: 1,
+      title: "Pencacahan Bahan",
+      details: "Gunakan parang atau sabit untuk mencacah daun gamal, lamtoro, atau sisa sayuran segar hingga berukuran 1-2 cm. Semakin kecil ukuran cacahan, semakin luas permukaan yang bisa diurai oleh mikroba, sehingga proses fermentasi akan berjalan jauh lebih cepat.",
+      icon: FiWind,
+      image: "https://picsum.photos/800/600?nature,leaves"
+    },
+    {
+      id: 2,
+      title: "Aktivasi Mikroba",
+      details: "Siapkan wadah kecil. Larutkan gula merah yang sudah disisir halus ke dalam sedikit air, kemudian tambahkan cairan EM4. Aduk rata dan diamkan selama 15-20 menit agar bakteri pembusuk mulai aktif dari masa hibernasinya.",
+      icon: FiDroplet,
+      image: "https://picsum.photos/800/600?water,glass"
+    },
+    {
+      id: 3,
+      title: "Pencampuran Bahan",
+      details: "Masukkan bahan hijauan yang sudah dicacah ke dalam tong plastik. Tuangkan 10 liter air bersih, kemudian masukkan larutan aktivator (EM4 + gula). Aduk kuat menggunakan kayu panjang hingga seluruh bahan tercampur sempurna.",
+      icon: FiRefreshCcw,
+      image: "https://picsum.photos/800/600?farm,tools"
+    },
+    {
+      id: 4,
+      title: "Masa Fermentasi",
+      details: "Tutup rapat tong plastik untuk menciptakan kondisi anaerob. Simpan di tempat teduh. Setiap 3 hari sekali, buka tutup tong perlahan untuk membuang gas, aduk sebentar, lalu tutup kembali dengan sangat rapat. Biarkan selama 14-21 hari.",
+      icon: FiClock,
+      image: "https://picsum.photos/800/600?nature,time"
+    }
+  ];
+
   return (
-    <motion.div 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
-      exit={{ opacity: 0 }} 
-      transition={{ duration: 0.4 }}
-      className="relative min-h-screen bg-[#f4f6f4] font-sans flex flex-col"
-    >
+    <div className="min-h-screen font-sans bg-white flex flex-col">
       
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.5 }} 
-        animate={{ opacity: 1, scale: 1 }} 
-        transition={{ delay: 0.2 }}
-        className="fixed top-6 left-6 z-50"
-      >
-        <Link to="/edukasi" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#163627] shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:bg-gray-50 transition-all hover:scale-110 active:scale-95 border border-gray-200">
-          <FaArrowLeft className="text-sm pr-[2px]" />
-        </Link>
+      {/* ================= NAVBAR SEDERHANA ================= */}
+      <div className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 py-4 px-6 sm:px-8">
+        {/* Diubah ke max-w-7xl */}
+        <div className="max-w-7xl mx-auto flex items-center relative">
+          <Link to="/edukasi" className="w-10 h-10 bg-gray-50 hover:bg-[#E9F5E1] rounded-full flex items-center justify-center text-gray-700 hover:text-[#559400] transition-colors border border-gray-200 focus:outline-none" style={{ WebkitTapHighlightColor: 'transparent' }}>
+            <FaArrowLeft className="text-sm pr-[2px]" />
+          </Link>
+          <span className="ml-4 font-bold text-[#111827]">Persiapan & Penggunaan</span>
+        </div>
+      </div>
+
+      {/* ================= HERO SECTION ================= */}
+      {/* Diubah ke max-w-7xl untuk wadah utamanya, tapi teks tetap dibatasi agar nyaman dibaca */}
+      <div className="pt-32 pb-16 px-6 sm:px-8 max-w-7xl mx-auto w-full flex flex-col items-center text-center">
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} className="max-w-4xl">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#111827] tracking-tight leading-[1.1] mb-6">
+            Meracik Pupuk Organik <br className="hidden md:block"/> Cair (POC) Mandiri
+          </h1>
+          <p className="text-gray-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+            Panduan persiapan alat dan bahan, serta tata cara pengaplikasian nutrisi cair berkualitas tinggi untuk tanaman Anda.
+          </p>
+        </motion.div>
+      </div>
+
+      {/* Diubah ke max-w-7xl agar gambar membentang lebar */}
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="w-full max-w-7xl mx-auto px-6 mb-16 md:mb-24">
+        <div className="w-full aspect-video md:aspect-[21/9] bg-gray-200 rounded-[2rem] overflow-hidden">
+          <img src="https://picsum.photos/1200/600?nature,farm,green" alt="Persiapan Alat dan Bahan" className="w-full h-full object-cover" />
+        </div>
       </motion.div>
 
-      <div className="flex-grow max-w-4xl mx-auto px-6 sm:px-8 pt-28 w-full pb-10">
-        
-        <div className="text-center mb-16">
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#e5f0e6] rounded-full text-sm font-bold mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#77D301]"></span>
-            <span className="text-[#163627]">Tahap 1: Persiapan</span>
-          </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl md:text-5xl font-extrabold text-[#111827] tracking-tight mb-6">
-            Alat & Bahan
-          </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
-            Sebelum memulai keajaiban meracik pupuk alami, pastikan semua "senjata" dan "amunisi" di bawah ini sudah tersedia di sekitar Anda.
-          </motion.p>
-        </div>
 
-        <motion.div initial="hidden" animate="visible" custom={1} variants={cardVariants} className="mb-12 bg-white rounded-[2rem] p-6 sm:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100">
-          <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
-            <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center border border-gray-200">
-              <FiSettings className="w-6 h-6 text-gray-700" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-gray-800">Alat Kerja</h2>
-              <p className="text-gray-500 text-sm mt-1">Peralatan dasar yang mudah ditemukan.</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[
-              "Drum atau Ember besar (dengan tutup rapat)",
-              "Parang atau alat pencacah",
-              "Terpal plastik alas pencampuran",
-              "Sarung tangan karet (opsional)",
-              "Pengaduk kayu panjang"
-            ].map((alat, i) => (
-              <div key={i} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
-                <FiCheck className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
-                <span className="text-gray-700 font-medium">{alat}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div initial="hidden" animate="visible" custom={2} variants={cardVariants} className="mb-16 bg-white rounded-[2rem] p-6 sm:p-10 shadow-[0_8px_30px_rgba(119,211,1,0.06)] border border-[#77D301]/20 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-[#77D301]/10 to-transparent rounded-bl-full z-0"></div>
+      {/* ================= ALAT & BAHAN ================= */}
+      <div className="bg-[#F7F8FA] w-full py-20 lg:py-28">
+        {/* Diubah ke max-w-7xl */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-8">
           
-          <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100 relative z-10">
-            <div className="w-14 h-14 bg-[#f0fdf4] rounded-2xl flex items-center justify-center border border-[#77D301]/30">
-              <FiPackage className="w-6 h-6 text-[#77D301]" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-[#163627]">Bahan Baku</h2>
-              <p className="text-gray-500 text-sm mt-1">Bahan organik yang menjadi inti pupuk.</p>
-            </div>
+          <div className="mb-12 md:mb-16 text-center md:text-left">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] mb-4">Kebutuhan Formulasi</h2>
+            <p className="text-gray-500 text-lg">Siapkan kelengkapan berikut sebelum Anda memulai proses peracikan di rumah.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10">
-            {[
-              "Bahan Hijau (Daun gamal, sisa sayur dll) - 1 Bagian",
-              "Bahan Cokelat (Sekam, jerami, dedaunan kering) - 1 Bagian",
-              "Kotoran Ternak (Sapi/Kambing/Ayam) - 1 Bagian",
-              "Cairan Dekomposer (EM4 Pertanian atau MOL buatan sendiri)",
-              "Gula Merah / Tetes Tebu (Molase)",
-              "Air Bersih (Sumur/Sungai, bukan air kaporit)"
-            ].map((bahan, i) => (
-              <div key={i} className="flex items-start gap-3 p-4 bg-[#f4f6f4]/50 border border-[#163627]/5 rounded-xl">
-                <FiCheck className="w-5 h-5 text-[#77D301] shrink-0 mt-0.5" />
-                <span className="text-[#163627] font-medium leading-relaxed">{bahan}</span>
+          <div className="flex flex-col md:flex-row gap-8 md:gap-10">
+            
+            {/* Panel Alat */}
+            <div className="w-full md:w-1/2 bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20 shrink-0">
+                  <FiTool className="w-6 h-6 text-[#559400]" />
+                </div>
+                <h3 className="text-2xl font-bold text-[#111827]">Persiapan Alat</h3>
               </div>
-            ))}
+              <ul className="flex flex-col gap-5">
+                {['Ember atau tong plastik bertutup rapat', 'Parang atau sabit untuk mencacah', 'Kayu panjang untuk mengaduk', 'Saringan (kain tipis/saringan teh)', 'Sarung tangan karet'].map((alat, i) => (
+                  <li key={i} className="flex items-start gap-4">
+                    <div className="mt-1 bg-[#F7F8FA] rounded-full p-1 shrink-0">
+                      <FiCheck className="text-[#79CF02] w-4 h-4" />
+                    </div>
+                    <span className="text-gray-700 font-medium text-lg leading-snug">{alat}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Panel Bahan */}
+            <div className="w-full md:w-1/2 bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20 shrink-0">
+                  <FiPackage className="w-6 h-6 text-[#559400]" />
+                </div>
+                <h3 className="text-2xl font-bold text-[#111827]">Persiapan Bahan</h3>
+              </div>
+              <ul className="flex flex-col gap-6">
+                {[
+                  { title: "Hijauan (Nitrogen)", desc: "1 kg daun gamal/lamtoro/sisa sayur." },
+                  { title: "Dekomposer", desc: "100 ml EM4 Pertanian atau air cucian beras." },
+                  { title: "Sumber Energi", desc: "100 gram gula merah atau molase cair." },
+                  { title: "Air Bersih", desc: "10 liter air (hindari air kaporit/PDAM langsung)." }
+                ].map((bahan, i) => (
+                  <li key={i} className="flex items-start gap-4">
+                    <div className="mt-1 bg-[#F7F8FA] rounded-full p-1 shrink-0">
+                      <FiCheck className="text-[#79CF02] w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-[#111827] font-bold block mb-1 text-lg">{bahan.title}</span>
+                      <span className="text-gray-500 leading-relaxed">{bahan.desc}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
           </div>
-        </motion.div>
-
-        {/* --- PANGGILAN BERTINDAK (CTA): TOMBOL MENUJU HALAMAN PRAKTIK --- */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }} className="w-full flex justify-center pt-8">
-          {/* PERBAIKAN: rounded-full menjadi rounded-2xl dan h-14 untuk desain GEPENG. to="/langkah-pembuatan" */}
-          <Link 
-            to="/langkah-pembuatan" 
-            className="flex w-full md:w-max items-center justify-center gap-4 bg-[#163627] text-white font-bold text-lg h-14 px-10 rounded-2xl hover:bg-black transition-all shadow-xl hover:scale-105 active:scale-95 duration-200"
-          >
-            <span>Mulai Praktik Pembuatan</span>
-            <FiArrowRight className="text-xl" />
-          </Link>
-        </motion.div>
-
+          
+        </div>
       </div>
-      
+
+
+      {/* ================= LANGKAH-LANGKAH ================= */}
+      <div className="w-full py-20 lg:py-28 bg-[#FFFFFF]">
+        {/* Diubah ke max-w-7xl */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-8">
+          
+          <div className="mb-16 text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#E9F5E1] rounded-full text-xs font-semibold mb-3 border border-[#79CF02]/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#79CF02]"></span>
+              <span className="text-[#559400]">Proses Pembuatan</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] mb-4">Langkah demi Langkah</h2>
+            <p className="text-gray-500 text-lg">Ikuti tahapan visual berikut ini untuk memastikan proses fermentasi Anda berjalan sempurna.</p>
+          </div>
+
+          <div className="relative">
+            <div className="absolute left-6 md:left-8 top-2 bottom-2 w-0.5 bg-gray-100 transform -translate-x-1/2 z-0"></div>
+
+            {steps.map((step, index) => {
+              const IconComponent = step.icon;
+              return (
+                <motion.div 
+                  initial="hidden" 
+                  whileInView="visible" 
+                  viewport={{ once: true, margin: "-50px" }} 
+                  variants={fadeIn} 
+                  key={step.id} 
+                  className={`relative z-10 flex gap-6 md:gap-10 ${index !== steps.length - 1 ? 'mb-20' : ''}`}
+                >
+                  <div className="w-12 h-12 md:w-16 md:h-16 shrink-0 bg-[#F7F8FA] rounded-full border-4 border-white flex items-center justify-center font-bold text-lg md:text-xl text-gray-700 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
+                    {step.id}
+                  </div>
+
+                  <div className="flex-1 flex flex-col lg:flex-row gap-8 lg:gap-16 pt-1 md:pt-2">
+                    <div className="flex-1">
+                      <div className="w-10 h-10 rounded-full bg-[#E9F5E1] flex items-center justify-center text-[#79CF02] mb-5 border border-[#79CF02]/20">
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <h3 className="text-2xl md:text-3xl font-bold text-[#111827] mb-3">{step.title}</h3>
+                      <p className="text-gray-500 text-base md:text-lg leading-relaxed">{step.details}</p>
+                    </div>
+
+                    {/* Mengurangi sedikit lebar gambar (lg:w-[40%]) agar ruang teks lebih lega di resolusi lebar */}
+                    <div className="w-full lg:w-[40%] shrink-0">
+                      <div className="w-full rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-100">
+                        <img 
+                          src={step.image} 
+                          alt={step.title} 
+                          className="w-full h-auto aspect-video md:aspect-[4/3] lg:aspect-auto lg:h-64 object-cover hover:scale-105 transition-transform duration-700" 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+        </div>
+      </div>
+
+
+      {/* ================= INDIKATOR KEBERHASILAN ================= */}
+      <div className="w-full py-20 lg:py-28 bg-[#F7F8FA]">
+        {/* Diubah ke max-w-7xl */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-8">
+          
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeIn} className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">
+            
+            <div className="w-full lg:w-1/3 lg:sticky lg:top-32">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight mb-4">Indikator Panen</h2>
+              <p className="text-gray-500 text-lg leading-relaxed">
+                Bagaimana cara mengetahui bahwa proses fermentasi POC Anda berhasil dan siap diaplikasikan? Perhatikan tiga tanda utama berikut.
+              </p>
+            </div>
+
+            <div className="w-full lg:w-2/3 flex flex-col gap-10 lg:gap-14 pt-2">
+              
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
+                <div className="w-14 h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
+                  <FiWind className="w-7 h-7 text-[#559400]" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Aroma Fermentasi</h3>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                    Pupuk yang berhasil akan mengeluarkan aroma wangi khas fermentasi, mirip seperti wangi tapai atau cairan alkohol. Jika baunya sangat busuk seperti bangkai, itu menandakan proses pembusukan gagal (didominasi bakteri patogen).
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
+                <div className="w-14 h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
+                  <FiEye className="w-7 h-7 text-[#559400]" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Perubahan Warna</h3>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                    Cairan pupuk akan berubah warna menjadi kuning kecokelatan hingga cokelat pekat gelap (bergantung pada bahan hijauan yang digunakan). Warna yang pekat menandakan unsur hara telah terlarut sempurna di dalam air.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
+                <div className="w-14 h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
+                  <FiThermometer className="w-7 h-7 text-[#559400]" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Suhu Mendingin</h3>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                    Pada minggu pertama fermentasi, suhu tong biasanya akan terasa hangat karena aktivitas bakteri yang tinggi. Pupuk dikatakan matang jika suhu cairannya sudah kembali normal atau dingin saat disentuh.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </motion.div>
+
+        </div>
+      </div>
+
+
+      {/* ================= PANDUAN APLIKASI ================= */}
+      <div className="bg-[#FFFFFF] w-full py-20 lg:py-28">
+        {/* Diubah ke max-w-7xl */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-8">
+          
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeIn} className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">
+            
+            <div className="w-full lg:w-2/3 flex flex-col gap-10 lg:gap-14 pt-2 order-2 lg:order-1">
+              
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
+                <div className="w-14 h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
+                  <FiDroplet className="w-7 h-7 text-[#559400]" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Rasio Pengenceran</h3>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                    Gunakan perbandingan <strong className="text-[#111827]">1:10</strong>. Campurkan 1 liter POC pekat hasil panen dengan 10 liter air bersih biasa ke dalam ember sebelum digunakan untuk penyiraman.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
+                <div className="w-14 h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
+                  <FiSun className="w-7 h-7 text-[#559400]" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Waktu Penyiraman</h3>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                    Lakukan penyemprotan pada daun atau penyiraman pada area akar di waktu <strong className="text-[#111827]">Pagi (06:00 - 09:00)</strong> atau <strong className="text-[#111827]">Sore (setelah jam 15:00)</strong> saat stomata tanaman sedang terbuka lebar.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
+                <div className="w-14 h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
+                  <FiClock className="w-7 h-7 text-[#559400]" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Frekuensi Aplikasi</h3>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                    Untuk mendapatkan hasil yang paling maksimal pada masa vegetatif (pertumbuhan awal), aplikasikan pupuk cair ini secara rutin sebanyak <strong className="text-[#111827]">1 hingga 2 kali dalam seminggu</strong>.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <div className="w-full lg:w-1/3 lg:sticky lg:top-32 order-1 lg:order-2">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight mb-4">Aturan Pakai & Dosis</h2>
+              <p className="text-gray-500 text-lg leading-relaxed">
+                Penting: Pupuk organik cair tidak boleh disiramkan langsung ke tanaman dalam keadaan pekat karena kandungannya terlalu keras dan dapat membuat tanaman layu (kepanasan).
+              </p>
+            </div>
+
+          </motion.div>
+
+        </div>
+      </div>
+
       <Footer />
-      
-    </motion.div>
+    </div>
   );
 }
