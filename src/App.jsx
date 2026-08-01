@@ -4,7 +4,6 @@ import { AnimatePresence } from 'framer-motion';
 import LandingPage from './pages/LandingPage';
 import EdukasiPage from './pages/EdukasiPage';
 import PraktikPupukPage from './pages/PraktikPupukPage';
-import LangkahPembuatanPage from './pages/LangkahPembuatanPage';
 
 // Kita membuat komponen pembungkus agar bisa menggunakan useLocation()
 function AnimatedRoutes() {
@@ -17,7 +16,6 @@ function AnimatedRoutes() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/edukasi" element={<EdukasiPage />} />
         <Route path="/praktik-pupuk" element={<PraktikPupukPage />} />
-        <Route path="/langkah-pembuatan" element={<LangkahPembuatanPage />} />
       </Routes>
     </AnimatePresence>
   );
