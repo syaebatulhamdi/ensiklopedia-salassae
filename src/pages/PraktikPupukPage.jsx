@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
 import { 
-  FiCheck, FiWind, FiEye, FiThermometer, FiDroplet, FiClock, FiSun, FiRefreshCcw, FiTool, FiPackage, FiChevronLeft, FiChevronRight
+  FiCheck, FiWind, FiEye, FiThermometer, FiDroplet, FiClock, FiSun, FiRefreshCcw, FiTool, FiPackage, FiChevronLeft, FiChevronRight, FiBox, FiLayers, FiChevronDown
 } from "react-icons/fi";
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '../components/Footer';
@@ -12,12 +12,23 @@ export default function PraktikPupukPage() {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   
+  // STATE UNTUK MENYIMPAN LANGKAH MANA YANG SEDANG TERBUKA (ACCORDION)
+  const [expandedSteps, setExpandedSteps] = useState({});
+
   const autoScrollDirection = useRef('right');
   const autoScrollInterval = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // FUNGSI UNTUK MEMBUKA/MENUTUP DETAIL LANGKAH
+  const toggleStep = (id) => {
+    setExpandedSteps(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
   // ================= LOGIKA CAROUSEL MOBILE =================
   useEffect(() => {
@@ -102,34 +113,79 @@ export default function PraktikPupukPage() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
   };
 
+  // ================= DATA LANGKAH PEMBUATAN =================
   const steps = [
     {
       id: 1,
-      title: "Pencacahan Bahan",
-      details: "Gunakan parang atau sabit untuk mencacah daun gamal, lamtoro, atau sisa sayuran segar hingga berukuran 1-2 cm. Semakin kecil ukuran cacahan, semakin luas permukaan yang bisa diurai oleh mikroba, sehingga proses fermentasi akan berjalan jauh lebih cepat.",
-      icon: FiWind,
-      image: "https://picsum.photos/800/600?nature,leaves"
+      title: "Mengundang Mikroba Baik",
+      details: "Letakkan nasi segar ke dalam wadah kotak kayu dan simpan di area rumpun bambu selama 4 hari hingga berjamur. Rumpun bambu dipilih karena merupakan ekosistem penghasil mikroorganisme terbaik dengan hormon pertumbuhan yang sangat kuat.",
+      icon: FiBox,
+      image: "https://picsum.photos/800/600?nature,bamboo",
+      extra: {
+        alat: ["Wadah kotak kayu", "Kain tipis untuk penutup"],
+        bahan: ["1 kg Nasi putih segar (baru dimasak)"],
+        penjelasan: "Penting: Jangan gunakan nasi basi. Nasi basi sudah didominasi bakteri patogen (pembusuk). Kita membutuhkan nasi segar agar mikroba spesifik dari akar bambulah yang tumbuh (ditandai dengan munculnya jamur putih/kuning setelah 4 hari)."
+      }
     },
     {
       id: 2,
-      title: "Aktivasi Mikroba",
-      details: "Siapkan wadah kecil. Larutkan gula merah yang sudah disisir halus ke dalam sedikit air, kemudian tambahkan cairan EM4. Aduk rata dan diamkan selama 15-20 menit agar bakteri pembusuk mulai aktif dari masa hibernasinya.",
-      icon: FiDroplet,
-      image: "https://picsum.photos/800/600?water,glass"
+      title: "Fermentasi Dekomposer (MOL)",
+      details: "Timbang nasi yang telah berjamur, lalu campurkan dengan gula merah halus dengan takaran 1:1 (tanpa tambahan air). Tutup rapat dan fermentasi kembali selama 7 hari untuk menghasilkan cairan MOL (Mikroba Lokal).",
+      icon: FiClock,
+      image: "https://picsum.photos/800/600?nature,fermentation",
+      extra: {
+        alat: ["Timbangan digital/manual", "Toples atau wadah plastik bertutup rapat"],
+        bahan: ["1 kg Nasi berjamur (dari Langkah 1)", "1 kg Gula merah yang disisir halus"],
+        penjelasan: "Campurkan kedua bahan dan remas menggunakan tangan (menggunakan sarung tangan plastik) hingga merata. Tidak perlu menambahkan air, karena seiring waktu campuran ini akan mencair dengan sendirinya menjadi cairan MOL kental yang wangi."
+      }
     },
     {
       id: 3,
-      title: "Pencampuran Bahan",
-      details: "Masukkan bahan hijauan yang sudah dicacah ke dalam tong plastik. Tuangkan 10 liter air bersih, kemudian masukkan larutan aktivator (EM4 + gula). Aduk kuat menggunakan kayu panjang hingga seluruh bahan tercampur sempurna.",
-      icon: FiRefreshCcw,
-      image: "https://picsum.photos/800/600?farm,tools"
+      title: "Persiapan Bahan Kompos",
+      details: "Siapkan kotoran sapi sebagai bahan baku utama pupuk. Campurkan dengan sekam padi atau serbuk kayu. Tambahan sekam ini sangat penting untuk menciptakan rongga udara agar tanah pertanian nantinya menjadi gembur.",
+      icon: FiLayers,
+      image: "https://picsum.photos/800/600?farm,soil",
+      extra: {
+        alat: ["Gerobak dorong", "Sekop"],
+        bahan: ["Kotoran sapi segar / semi-kering", "Sekam padi atau serbuk kayu gergaji"],
+        penjelasan: "Penambahan sekam padi sangat disukai karena struktur karbonnya tidak mudah hancur, sehingga rongga udara di dalam tanah tetap terjaga (gembur) untuk jangka panjang. Aduk kasar kotoran sapi dan sekam agar merata."
+      }
     },
     {
       id: 4,
-      title: "Masa Fermentasi",
-      details: "Tutup rapat tong plastik untuk menciptakan kondisi anaerob. Simpan di tempat teduh. Setiap 3 hari sekali, buka tutup tong perlahan untuk membuang gas, aduk sebentar, lalu tutup kembali dengan sangat rapat. Biarkan selama 14-21 hari.",
-      icon: FiClock,
-      image: "https://picsum.photos/800/600?nature,time"
+      title: "Penyemprotan & Pengadukan",
+      details: "Larutkan 1 sendok makan cairan MOL ke dalam 5 liter air. Semprotkan secara merata ke tumpukan bahan kompos menggunakan tangki semprot (sprayer) sambil terus dibolak-balik. Larutan ini seketika akan menghilangkan bau menyengat dari kotoran.",
+      icon: FiRefreshCcw,
+      image: "https://picsum.photos/800/600?farm,tools",
+      extra: {
+        alat: ["Tangki semprot (Sprayer)", "Sekop untuk membolak-balik"],
+        bahan: ["1 Sendok makan cairan MOL (dari Langkah 2)", "5 Liter Air Bersih"],
+        penjelasan: "Kunci keberhasilannya ada pada pengadukan. Semprotkan sedikit demi sedikit sambil kompos dibolak-balik. Begitu MOL yang mengandung mikroorganisme dari bambu ini menyentuh kotoran, bau amonia (bau pesing/busuk) akan netral dan hilang dalam waktu 1-3 menit."
+      }
+    },
+    {
+      id: 5,
+      title: "Penutupan (Masa Inkubasi)",
+      details: "Tutup rapat tumpukan kompos tersebut menggunakan terpal dan biarkan selama 14 hingga 21 hari. Langkah ini sangat krusial untuk menjaga kestabilan suhu, memicu aktivitas bakteri pengurai secara maksimal, dan mempercepat proses pematangan kompos.",
+      icon: FiThermometer,
+      image: "https://picsum.photos/800/600?farm,tarp",
+      extra: {
+        alat: ["Terpal tebal", "Batu atau balok kayu (sebagai pemberat pinggiran terpal)"],
+        bahan: ["Tumpukan kompos yang telah disemprot MOL"],
+        penjelasan: "Tumpukan akan mengalami peningkatan suhu (terasa sangat panas jika disentuh). Panas ini membuktikan bakteri sedang bekerja aktif mengurai bahan sekaligus membunuh biji gulma dan bakteri penyakit jahat di dalam kotoran sapi."
+      }
+    },
+    {
+      id: 6,
+      title: "Pengayakan & Pengemasan",
+      details: "Setelah kompos matang dan terurai sempurna, lakukan pengayakan (filter) untuk memisahkan benda asing seperti sisa plastik atau batu. Pupuk kompos alami kini bersih, siap dikemas, atau langsung diaplikasikan untuk menyuburkan lahan!",
+      icon: FiPackage,
+      image: "https://picsum.photos/800/600?farm,sack",
+      extra: {
+        alat: ["Ayakan kawat/plastik", "Karung kemasan"],
+        bahan: ["Kompos matang (suhu sudah dingin, bau tanah humus)"],
+        penjelasan: "Proses pengayakan menjamin kualitas fisik pupuk yang akan dijual atau dipakai. Pastikan kompos tidak dikemas saat suhunya masih panas, biarkan diangin-anginkan sejenak setelah terpal dibuka."
+      }
     }
   ];
 
@@ -158,12 +214,12 @@ export default function PraktikPupukPage() {
               </div>
             </motion.div>
 
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-4xl md:text-5xl lg:text-6xl xl:text-[4rem] font-extrabold text-[#111827] tracking-tight leading-[1.1] mb-6">
-              Meracik Pupuk Organik <br className="hidden lg:block"/> Cair <span className="text-[#79CF02]">Mandiri</span>
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-4xl md:text-5xl lg:text-6xl xl:text-[4.2rem] font-extrabold text-[#111827] tracking-tight leading-[1.1] mb-6">
+              Meracik Kompos <br className="hidden lg:block"/> & MOL <span className="text-[#79CF02]">Mandiri</span>
             </motion.h1>
 
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-gray-600 text-base md:text-lg lg:text-xl max-w-xl leading-relaxed">
-              Panduan persiapan alat dan bahan, serta tata cara pengaplikasian nutrisi cair berkualitas tinggi dari alam untuk tanaman Anda.
+              Panduan lengkap persiapan alat dan bahan, serta tata cara peracikan dekomposer lokal hingga menghasilkan pupuk kompos organik berkualitas.
             </motion.p>
           </div>
 
@@ -221,13 +277,13 @@ export default function PraktikPupukPage() {
       </div>
 
 
-      {/* ================= ALAT & BAHAN (PUTIH) ================= */}
+      {/* ================= ALAT & BAHAN UMUM (PUTIH) ================= */}
       <div className="bg-[#FFFFFF] w-full py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           
           <div className="mb-12 md:mb-16 flex flex-col items-start text-left">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight mb-4">Kebutuhan Formulasi</h2>
-            <p className="text-gray-500 text-lg">Siapkan kelengkapan berikut sebelum Anda memulai proses peracikan di rumah.</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight mb-4">Kebutuhan Formulasi Utama</h2>
+            <p className="text-gray-500 text-lg">Siapkan kelengkapan dasar berikut sebelum Anda memulai proses peracikan di lapangan.</p>
           </div>
 
           <div className="flex flex-col md:flex-row gap-8 md:gap-10">
@@ -241,7 +297,13 @@ export default function PraktikPupukPage() {
                 <h3 className="text-2xl font-bold text-[#111827]">Persiapan Alat</h3>
               </div>
               <ul className="flex flex-col gap-5">
-                {['Ember atau tong plastik bertutup rapat', 'Parang atau sabit untuk mencacah', 'Kayu panjang untuk mengaduk', 'Saringan (kain tipis/saringan teh)', 'Sarung tangan karet'].map((alat, i) => (
+                {[
+                  'Kotak atau wadah kayu untuk menyimpan nasi', 
+                  'Gerobak dorong untuk memuat bahan', 
+                  'Sekop untuk mengaduk dan membolak-balik kompos', 
+                  'Tangki semprot (Sprayer) untuk menyemprotkan MOL', 
+                  'Terpal tebal untuk penutup masa inkubasi'
+                ].map((alat, i) => (
                   <li key={i} className="flex items-start gap-4">
                     <div className="mt-1 bg-white rounded-full p-1 shadow-sm border border-gray-100 shrink-0">
                       <FiCheck className="text-[#79CF02] w-4 h-4" />
@@ -262,10 +324,10 @@ export default function PraktikPupukPage() {
               </div>
               <ul className="flex flex-col gap-6">
                 {[
-                  { title: "Hijauan (Nitrogen)", desc: "1 kg daun gamal/lamtoro/sisa sayur." },
-                  { title: "Dekomposer", desc: "100 ml EM4 Pertanian atau air cucian beras." },
-                  { title: "Sumber Energi", desc: "100 gram gula merah atau molase cair." },
-                  { title: "Air Bersih", desc: "10 liter air (hindari air kaporit/PDAM langsung)." }
+                  { title: "Bahan Dekomposer", desc: "Nasi segar (baru dimasak) dan Gula merah yang sudah dihaluskan (Rasio 1:1)." },
+                  { title: "Bahan Utama Kompos", desc: "Kotoran sapi secukupnya sebagai suplai nutrisi dasar." },
+                  { title: "Pencipta Rongga", desc: "Sekam padi atau serbuk kayu untuk menjaga kegemburan tanah." },
+                  { title: "Air Pelarut", desc: "Air bersih untuk melarutkan campuran MOL sebelum disemprotkan." }
                 ].map((bahan, i) => (
                   <li key={i} className="flex items-start gap-4">
                     <div className="mt-1 bg-white rounded-full p-1 shadow-sm border border-gray-100 shrink-0">
@@ -286,13 +348,16 @@ export default function PraktikPupukPage() {
       </div>
 
 
-      {/* ================= LANGKAH-LANGKAH (ABU-ABU) ================= */}
+      {/* ================= LANGKAH-LANGKAH INTERAKTIF (ABU-ABU) ================= */}
       <div className="w-full py-20 lg:py-28 bg-[#F7F8FA]">
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           
           <div className="mb-16 flex flex-col items-start text-left">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight mb-4">Langkah demi Langkah</h2>
-            <p className="text-gray-500 text-lg">Ikuti tahapan visual berikut ini untuk memastikan proses fermentasi Anda berjalan sempurna.</p>
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-gray-200 rounded-full text-sm font-semibold mb-4 shadow-sm">
+              <span className="text-gray-700">Panduan Praktik Interaktif</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight mb-4">Mahakarya dari Rumpun Bambu hingga Panen</h2>
+            <p className="text-gray-500 text-lg max-w-3xl">Rahasia utama pertanian Salassae terletak pada pembuatan dekomposer mandiri (MOL). Klik tombol <strong className="text-[#79CF02]">"Lihat Detail"</strong> pada setiap langkah di bawah ini untuk melihat kebutuhan alat, takaran bahan, dan tips khusus.</p>
           </div>
 
           <div className="relative">
@@ -300,6 +365,8 @@ export default function PraktikPupukPage() {
 
             {steps.map((step, index) => {
               const IconComponent = step.icon;
+              const isExpanded = expandedSteps[step.id];
+
               return (
                 <motion.div 
                   initial="hidden" 
@@ -309,28 +376,101 @@ export default function PraktikPupukPage() {
                   key={step.id} 
                   className={`relative z-10 flex gap-6 md:gap-10 ${index !== steps.length - 1 ? 'mb-20' : ''}`}
                 >
-                  <div className="w-12 h-12 md:w-16 md:h-16 shrink-0 bg-white rounded-full flex items-center justify-center font-bold text-lg md:text-xl text-gray-700 shadow-sm border border-gray-100">
+                  {/* Angka Lingkaran */}
+                  <div className={`w-12 h-12 md:w-16 md:h-16 shrink-0 rounded-full flex items-center justify-center font-bold text-lg md:text-xl shadow-sm border transition-colors duration-300 ${isExpanded ? 'bg-[#79CF02] text-white border-[#79CF02]' : 'bg-white text-gray-700 border-gray-200'}`}>
                     {step.id}
                   </div>
 
-                  <div className="flex-1 flex flex-col lg:flex-row gap-8 lg:gap-16 pt-1 md:pt-2">
-                    <div className="flex-1">
+                  {/* KONTINER UTAMA (FLEX-WRAP & ORDERING) */}
+                  {/* Penjelasan Trik:
+                      - Pada HP (flex-col): Teks di atas (order-1), Detail di tengah (order-2), Gambar di bawah (order-3).
+                      - Pada Laptop (flex-row flex-wrap): Teks di kiri (order-1), Gambar di kanan (order-2), Detail meluas di bawahnya (order-3 w-full).
+                  */}
+                  <div className="flex-1 flex flex-col lg:flex-row lg:flex-wrap w-full pt-1 md:pt-2">
+                    
+                    {/* 1. BAGIAN TEKS UTAMA */}
+                    <div className="order-1 lg:order-1 flex-1 min-w-0 mb-8 lg:mb-0 lg:pr-12">
                       <div className="w-10 h-10 rounded-full bg-[#E9F5E1] flex items-center justify-center text-[#79CF02] mb-5 border border-[#79CF02]/20">
                         <IconComponent className="w-5 h-5" />
                       </div>
                       <h3 className="text-2xl md:text-3xl font-bold text-[#111827] mb-3">{step.title}</h3>
                       <p className="text-gray-500 text-base md:text-lg leading-relaxed">{step.details}</p>
+                      
+                      {/* Tombol Toggle Detail */}
+                      <button 
+                        onClick={() => toggleStep(step.id)}
+                        className="mt-6 flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 hover:border-[#79CF02] rounded-full text-sm font-bold text-[#111827] hover:text-[#559400] transition-all shadow-sm focus:outline-none group"
+                        style={{ WebkitTapHighlightColor: 'transparent' }}
+                      >
+                        <span>{isExpanded ? "Tutup Detail" : "Lihat Detail Alat & Bahan"}</span>
+                        <FiChevronDown className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? "rotate-180 text-[#79CF02]" : "text-gray-400 group-hover:text-[#79CF02]"}`} />
+                      </button>
                     </div>
 
-                    <div className="w-full lg:w-[40%] shrink-0">
-                      <div className="w-full rounded-[2rem] overflow-hidden shadow-sm border border-gray-200">
+                    {/* 2. BAGIAN DETAIL (ACCORDION) */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.4, ease: "easeInOut" }}
+                          className="order-2 lg:order-3 w-full overflow-hidden"
+                        >
+                          <div className="mb-8 lg:mb-0 lg:mt-8 bg-white border border-gray-100 rounded-[2rem] p-6 md:p-8 shadow-sm">
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                              {/* Kolom Alat */}
+                              <div>
+                                <h5 className="font-bold text-[#111827] mb-4 flex items-center gap-2">
+                                  <FiTool className="text-[#79CF02]" /> Alat Khusus
+                                </h5>
+                                <ul className="flex flex-col gap-3">
+                                  {step.extra.alat.map((item, i) => (
+                                    <li key={i} className="flex items-start gap-3 text-sm md:text-base text-gray-600">
+                                      <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0"></div>
+                                      <span>{item}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                              {/* Kolom Bahan */}
+                              <div>
+                                <h5 className="font-bold text-[#111827] mb-4 flex items-center gap-2">
+                                  <FiPackage className="text-[#79CF02]" /> Bahan & Takaran
+                                </h5>
+                                <ul className="flex flex-col gap-3">
+                                  {step.extra.bahan.map((item, i) => (
+                                    <li key={i} className="flex items-start gap-3 text-sm md:text-base text-gray-600">
+                                      <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0"></div>
+                                      <span>{item}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                            
+                            {/* Catatan Ekstra */}
+                            <div className="bg-[#f0fdf4] p-5 rounded-2xl border border-[#79CF02]/20 text-sm md:text-base text-[#417002] leading-relaxed">
+                              <strong>💡 Catatan Penting:</strong> {step.extra.penjelasan}
+                            </div>
+
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* 3. BAGIAN GAMBAR */}
+                    <div className="order-3 lg:order-2 w-full lg:w-[40%] shrink-0">
+                      <div className="w-full rounded-[2rem] overflow-hidden shadow-sm border border-gray-200 bg-white p-2">
                         <img 
                           src={step.image} 
                           alt={step.title} 
-                          className="w-full h-auto aspect-video md:aspect-[4/3] lg:aspect-auto lg:h-64 object-cover hover:scale-105 transition-transform duration-700" 
+                          className="w-full h-auto aspect-video md:aspect-[4/3] lg:aspect-auto lg:h-64 object-cover rounded-[1.5rem] hover:scale-105 transition-transform duration-700" 
                         />
                       </div>
                     </div>
+
                   </div>
                 </motion.div>
               );
@@ -350,7 +490,7 @@ export default function PraktikPupukPage() {
             <div className="w-full lg:w-1/3 lg:sticky lg:top-32">
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight mb-4">Indikator Panen</h2>
               <p className="text-gray-500 text-lg leading-relaxed">
-                Bagaimana cara mengetahui bahwa proses fermentasi POC Anda berhasil dan siap diaplikasikan? Perhatikan tiga tanda utama berikut.
+                Bagaimana cara mengetahui bahwa proses fermentasi MOL dan Kompos Anda berhasil? Perhatikan tiga tanda utama berikut.
               </p>
             </div>
 
@@ -363,7 +503,7 @@ export default function PraktikPupukPage() {
                 <div>
                   <h3 className="text-2xl font-bold text-[#111827] mb-3">Aroma Fermentasi</h3>
                   <p className="text-gray-600 text-lg leading-relaxed">
-                    Pupuk yang berhasil akan mengeluarkan aroma wangi khas fermentasi, mirip seperti wangi tapai atau cairan alkohol. Jika baunya sangat busuk seperti bangkai, itu menandakan proses pembusukan gagal (didominasi bakteri patogen).
+                    Cairan MOL yang berhasil akan mengeluarkan aroma wangi khas yang menyerupai aroma tapai atau alkohol. Sementara itu, pada kompos padat, bau kotoran yang menyengat akan sepenuhnya hilang, berganti menjadi aroma segar layaknya tanah humus hutan.
                   </p>
                 </div>
               </div>
@@ -373,9 +513,9 @@ export default function PraktikPupukPage() {
                   <FiEye className="w-7 h-7 text-[#559400]" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Perubahan Warna</h3>
+                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Perubahan Warna & Tekstur</h3>
                   <p className="text-gray-600 text-lg leading-relaxed">
-                    Cairan pupuk akan berubah warna menjadi kuning kecokelatan hingga cokelat pekat gelap (bergantung pada bahan hijauan yang digunakan). Warna yang pekat menandakan unsur hara telah terlarut sempurna di dalam air.
+                    Fermentasi MOL akan mengubah cairan menjadi warna cokelat hingga hitam pekat. Untuk pupuk kompos padat, teksturnya akan berubah menjadi lebih hancur, gembur, dan warnanya menggelap merata.
                   </p>
                 </div>
               </div>
@@ -385,9 +525,9 @@ export default function PraktikPupukPage() {
                   <FiThermometer className="w-7 h-7 text-[#559400]" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Suhu Mendingin</h3>
+                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Suhu Menurun</h3>
                   <p className="text-gray-600 text-lg leading-relaxed">
-                    Pada minggu pertama fermentasi, suhu tong biasanya akan terasa hangat karena aktivitas bakteri yang tinggi. Pupuk dikatakan matang jika suhu cairannya sudah kembali normal atau dingin saat disentuh.
+                    Di awal penutupan terpal, suhu tumpukan kompos akan terasa hangat karena aktivitas bakteri yang tinggi. Kompos dikatakan benar-benar matang dan siap pakai apabila suhunya sudah kembali normal atau terasa dingin saat disentuh.
                   </p>
                 </div>
               </div>
@@ -412,9 +552,21 @@ export default function PraktikPupukPage() {
                   <FiDroplet className="w-7 h-7 text-[#559400]" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Rasio Pengenceran</h3>
+                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Aplikasi Kompos Padat</h3>
                   <p className="text-gray-600 text-lg leading-relaxed">
-                    Gunakan perbandingan <strong className="text-[#111827]">1:10</strong>. Campurkan 1 liter POC pekat hasil panen dengan 10 liter air bersih biasa ke dalam ember sebelum digunakan untuk penyiraman.
+                    Taburkan pupuk kompos yang telah diayak secara merata di area sekitar perakaran tanaman. Kompos ini akan bekerja secara perlahan melepaskan nutrisi ke dalam tanah tanpa merusak akar.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
+                <div className="w-14 h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
+                  <FiRefreshCcw className="w-7 h-7 text-[#559400]" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Penyemprotan MOL Susulan</h3>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                    Sisa cairan MOL yang tidak digunakan ke kompos dapat diaplikasikan langsung ke tanah. Selalu ingat takaran pengencerannya: <strong className="text-[#111827]">1 sendok makan MOL dicampur 5 liter air bersih</strong> sebelum disemprotkan.
                   </p>
                 </div>
               </div>
@@ -424,21 +576,9 @@ export default function PraktikPupukPage() {
                   <FiSun className="w-7 h-7 text-[#559400]" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Waktu Penyiraman</h3>
+                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Waktu Pemupukan</h3>
                   <p className="text-gray-600 text-lg leading-relaxed">
-                    Lakukan penyemprotan pada daun atau penyiraman pada area akar di waktu <strong className="text-[#111827]">Pagi (06:00 - 09:00)</strong> atau <strong className="text-[#111827]">Sore (setelah jam 15:00)</strong> saat stomata tanaman sedang terbuka lebar.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-6 items-start">
-                <div className="w-14 h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
-                  <FiClock className="w-7 h-7 text-[#559400]" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-[#111827] mb-3">Frekuensi Aplikasi</h3>
-                  <p className="text-gray-600 text-lg leading-relaxed">
-                    Untuk mendapatkan hasil yang paling maksimal pada masa vegetatif (pertumbuhan awal), aplikasikan pupuk cair ini secara rutin sebanyak <strong className="text-[#111827]">1 hingga 2 kali dalam seminggu</strong>.
+                    Lakukan pemupukan atau penyemprotan MOL di waktu <strong className="text-[#111827]">Pagi (06:00 - 09:00)</strong> atau <strong className="text-[#111827]">Sore (setelah jam 15:00)</strong>, karena pada waktu-waktu inilah aktivitas tanah dan penyerapan stomata tanaman sedang optimal.
                   </p>
                 </div>
               </div>
@@ -446,9 +586,9 @@ export default function PraktikPupukPage() {
             </div>
 
             <div className="w-full lg:w-1/3 lg:sticky lg:top-32 order-1 lg:order-2">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight mb-4">Aturan Pakai & Dosis</h2>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight mb-4">Aturan Pakai & Aplikasi</h2>
               <p className="text-gray-500 text-lg leading-relaxed">
-                Penting: Pupuk organik cair tidak boleh disiramkan langsung ke tanaman dalam keadaan pekat karena kandungannya terlalu keras dan dapat membuat tanaman layu (kepanasan).
+                Penting: Jangan pernah menyemprotkan cairan MOL (pengurai) langsung dalam keadaan pekat tanpa dicampur air, karena konsentrasinya terlalu kuat bagi tanaman.
               </p>
             </div>
 
