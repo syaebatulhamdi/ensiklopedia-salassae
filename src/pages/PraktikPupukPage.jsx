@@ -1,16 +1,101 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
 import { 
-  FiCheck, FiWind, FiEye, FiThermometer, FiDroplet, FiClock, FiSun, FiRefreshCcw, FiTool, FiPackage
+  FiCheck, FiWind, FiEye, FiThermometer, FiDroplet, FiClock, FiSun, FiRefreshCcw, FiTool, FiPackage, FiChevronLeft, FiChevronRight
 } from "react-icons/fi";
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '../components/Footer';
 
 export default function PraktikPupukPage() {
+  const carouselRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  
+  const autoScrollDirection = useRef('right');
+  const autoScrollInterval = useRef(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // ================= LOGIKA CAROUSEL MOBILE =================
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const startAutoScroll = () => {
+      autoScrollInterval.current = setInterval(() => {
+        if (!carousel) return;
+        
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        
+        if (maxScroll <= 0) return; 
+        
+        if (carousel.scrollLeft >= maxScroll - 5) {
+          autoScrollDirection.current = 'left';
+        } else if (carousel.scrollLeft <= 5) {
+          autoScrollDirection.current = 'right';
+        }
+
+        const scrollAmount = carousel.clientWidth * 0.8;
+        
+        carousel.scrollBy({
+          left: autoScrollDirection.current === 'right' ? scrollAmount : -scrollAmount,
+          behavior: 'smooth' 
+        });
+
+      }, 3000); 
+    };
+
+    startAutoScroll();
+
+    const pauseScroll = () => clearInterval(autoScrollInterval.current);
+    const resumeScroll = () => startAutoScroll();
+
+    carousel.addEventListener('mouseenter', pauseScroll);
+    carousel.addEventListener('mouseleave', resumeScroll);
+    carousel.addEventListener('touchstart', pauseScroll, { passive: true });
+    carousel.addEventListener('touchend', resumeScroll);
+
+    return () => {
+      clearInterval(autoScrollInterval.current);
+      carousel.removeEventListener('mouseenter', pauseScroll);
+      carousel.removeEventListener('mouseleave', resumeScroll);
+      carousel.removeEventListener('touchstart', pauseScroll);
+      carousel.removeEventListener('touchend', resumeScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    const checkScrollPosition = () => {
+      if (carousel) {
+        const { scrollLeft, scrollWidth, clientWidth } = carousel;
+        setCanScrollLeft(scrollLeft > 2);
+        setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 2);
+      }
+    };
+    if (carousel) {
+      checkScrollPosition(); 
+      carousel.addEventListener('scroll', checkScrollPosition); 
+      window.addEventListener('resize', checkScrollPosition); 
+      return () => {
+        carousel.removeEventListener('scroll', checkScrollPosition);
+        window.removeEventListener('resize', checkScrollPosition);
+      };
+    }
+  }, []);
+
+  const scrollCarousel = (direction) => {
+    if (carouselRef.current) {
+      const scrollAmount = carouselRef.current.clientWidth * 0.8;
+      carouselRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth' 
+      });
+    }
+  };
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
@@ -51,54 +136,106 @@ export default function PraktikPupukPage() {
   return (
     <div className="min-h-screen font-sans bg-white flex flex-col">
       
-      {/* ================= NAVBAR SEDERHANA ================= */}
-      <div className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 py-4 px-6 sm:px-8">
-        {/* Diubah ke max-w-7xl */}
+      {/* ================= NAVBAR ================= */}
+      <div className="fixed top-0 left-0 w-full z-50 bg-[#E9F5E1]/95 backdrop-blur-md border-b border-[#79CF02]/10 py-4 px-6 sm:px-8">
         <div className="max-w-7xl mx-auto flex items-center relative">
-          <Link to="/edukasi" className="w-10 h-10 bg-gray-50 hover:bg-[#E9F5E1] rounded-full flex items-center justify-center text-gray-700 hover:text-[#559400] transition-colors border border-gray-200 focus:outline-none" style={{ WebkitTapHighlightColor: 'transparent' }}>
+          <Link to="/edukasi" className="w-10 h-10 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.08)] rounded-full flex items-center justify-center text-[#111827] hover:bg-[#79CF02] transition-all hover:scale-110 active:scale-95 border border-white focus:outline-none" style={{ WebkitTapHighlightColor: 'transparent' }}>
             <FaArrowLeft className="text-sm pr-[2px]" />
           </Link>
           <span className="ml-4 font-bold text-[#111827]">Persiapan & Penggunaan</span>
         </div>
       </div>
 
-      {/* ================= HERO SECTION ================= */}
-      {/* Diubah ke max-w-7xl untuk wadah utamanya, tapi teks tetap dibatasi agar nyaman dibaca */}
-      <div className="pt-32 pb-16 px-6 sm:px-8 max-w-7xl mx-auto w-full flex flex-col items-center text-center">
-        <motion.div initial="hidden" animate="visible" variants={fadeIn} className="max-w-4xl">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#111827] tracking-tight leading-[1.1] mb-6">
-            Meracik Pupuk Organik <br className="hidden md:block"/> Cair (POC) Mandiri
-          </h1>
-          <p className="text-gray-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            Panduan persiapan alat dan bahan, serta tata cara pengaplikasian nutrisi cair berkualitas tinggi untuk tanaman Anda.
-          </p>
-        </motion.div>
+      {/* ================= HERO SECTION (HIJAU) ================= */}
+      <div className="bg-[#E9F5E1] pt-36 pb-20 lg:pt-44 lg:pb-32 overflow-hidden">
+        <div className="px-6 sm:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+          
+          <div className="w-full lg:w-1/2 flex flex-col items-start text-left">
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#79CF02]/15 rounded-full text-xs md:text-sm font-bold text-[#559400] mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#79CF02]"></span>
+                Panduan Praktik
+              </div>
+            </motion.div>
+
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-4xl md:text-5xl lg:text-6xl xl:text-[4rem] font-extrabold text-[#111827] tracking-tight leading-[1.1] mb-6">
+              Meracik Pupuk Organik <br className="hidden lg:block"/> Cair <span className="text-[#79CF02]">Mandiri</span>
+            </motion.h1>
+
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-gray-600 text-base md:text-lg lg:text-xl max-w-xl leading-relaxed">
+              Panduan persiapan alat dan bahan, serta tata cara pengaplikasian nutrisi cair berkualitas tinggi dari alam untuk tanaman Anda.
+            </motion.p>
+          </div>
+
+          <div className="w-full lg:w-1/2 mt-4 lg:mt-0 relative">
+            
+            {/* TAMPILAN MOBILE: CAROUSEL */}
+            <div className="block lg:hidden w-full relative">
+              <AnimatePresence>
+                {canScrollLeft && (
+                  <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} onClick={() => scrollCarousel('left')} className="absolute left-2 top-[50%] -translate-y-1/2 z-10 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#111827] shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:bg-[#79CF02] active:scale-95 transition-all border border-gray-200 focus:outline-none">
+                    <FiChevronLeft className="text-xl pr-[2px]" />
+                  </motion.button>
+                )}
+              </AnimatePresence>
+              
+              <div ref={carouselRef} className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 pt-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory">
+                {[
+                  "https://picsum.photos/800/600?farm,green",
+                  "https://picsum.photos/800/600?leaves,texture",
+                  "https://picsum.photos/800/600?farmer,hands",
+                  "https://picsum.photos/800/600?nature,field"
+                ].map((img, i) => (
+                  <div key={i} className="snap-center shrink-0 w-[85%] sm:w-[65%] aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.08)] bg-white border border-gray-100">
+                    <img src={img} alt={`Pertanian ${i+1}`} className="w-full h-full object-cover" />
+                  </div>
+                ))}
+              </div>
+
+              <AnimatePresence>
+                {canScrollRight && (
+                  <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} onClick={() => scrollCarousel('right')} className="absolute right-2 top-[50%] -translate-y-1/2 z-10 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#111827] shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:bg-[#79CF02] active:scale-95 transition-all border border-gray-200 focus:outline-none">
+                    <FiChevronRight className="text-xl pl-[2px]" />
+                  </motion.button>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* TAMPILAN DESKTOP: BENTO GRID TANGGA */}
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.3 }} className="hidden lg:grid grid-cols-2 gap-4 sm:gap-6 items-center">
+              
+              <div className="flex flex-col gap-4 sm:gap-6 mt-16 lg:mt-24">
+                <img src="https://picsum.photos/800/600?farm,green" alt="Pertanian 1" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
+                <img src="https://picsum.photos/800/600?leaves,texture" alt="Pertanian 2" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
+              </div>
+
+              <div className="flex flex-col gap-4 sm:gap-6 -mt-16 lg:-mt-24">
+                <img src="https://picsum.photos/800/600?farmer,hands" alt="Pertanian 3" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
+                <img src="https://picsum.photos/800/600?nature,field" alt="Pertanian 4" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
+              </div>
+
+            </motion.div>
+          </div>
+
+        </div>
       </div>
 
-      {/* Diubah ke max-w-7xl agar gambar membentang lebar */}
-      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="w-full max-w-7xl mx-auto px-6 mb-16 md:mb-24">
-        <div className="w-full aspect-video md:aspect-[21/9] bg-gray-200 rounded-[2rem] overflow-hidden">
-          <img src="https://picsum.photos/1200/600?nature,farm,green" alt="Persiapan Alat dan Bahan" className="w-full h-full object-cover" />
-        </div>
-      </motion.div>
 
-
-      {/* ================= ALAT & BAHAN ================= */}
-      <div className="bg-[#F7F8FA] w-full py-20 lg:py-28">
-        {/* Diubah ke max-w-7xl */}
+      {/* ================= ALAT & BAHAN (PUTIH) ================= */}
+      <div className="bg-[#FFFFFF] w-full py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           
-          <div className="mb-12 md:mb-16 text-center md:text-left">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] mb-4">Kebutuhan Formulasi</h2>
+          <div className="mb-12 md:mb-16 flex flex-col items-start text-left">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight mb-4">Kebutuhan Formulasi</h2>
             <p className="text-gray-500 text-lg">Siapkan kelengkapan berikut sebelum Anda memulai proses peracikan di rumah.</p>
           </div>
 
           <div className="flex flex-col md:flex-row gap-8 md:gap-10">
             
-            {/* Panel Alat */}
-            <div className="w-full md:w-1/2 bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+            {/* Panel 1 */}
+            <div className="w-full md:w-1/2 bg-[#F7F8FA] p-8 md:p-10 rounded-[2rem] border border-gray-100">
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20 shrink-0">
+                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center border border-[#79CF02]/20 shadow-sm shrink-0">
                   <FiTool className="w-6 h-6 text-[#559400]" />
                 </div>
                 <h3 className="text-2xl font-bold text-[#111827]">Persiapan Alat</h3>
@@ -106,7 +243,7 @@ export default function PraktikPupukPage() {
               <ul className="flex flex-col gap-5">
                 {['Ember atau tong plastik bertutup rapat', 'Parang atau sabit untuk mencacah', 'Kayu panjang untuk mengaduk', 'Saringan (kain tipis/saringan teh)', 'Sarung tangan karet'].map((alat, i) => (
                   <li key={i} className="flex items-start gap-4">
-                    <div className="mt-1 bg-[#F7F8FA] rounded-full p-1 shrink-0">
+                    <div className="mt-1 bg-white rounded-full p-1 shadow-sm border border-gray-100 shrink-0">
                       <FiCheck className="text-[#79CF02] w-4 h-4" />
                     </div>
                     <span className="text-gray-700 font-medium text-lg leading-snug">{alat}</span>
@@ -115,10 +252,10 @@ export default function PraktikPupukPage() {
               </ul>
             </div>
 
-            {/* Panel Bahan */}
-            <div className="w-full md:w-1/2 bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+            {/* Panel 2 */}
+            <div className="w-full md:w-1/2 bg-[#F7F8FA] p-8 md:p-10 rounded-[2rem] border border-gray-100">
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20 shrink-0">
+                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center border border-[#79CF02]/20 shadow-sm shrink-0">
                   <FiPackage className="w-6 h-6 text-[#559400]" />
                 </div>
                 <h3 className="text-2xl font-bold text-[#111827]">Persiapan Bahan</h3>
@@ -131,7 +268,7 @@ export default function PraktikPupukPage() {
                   { title: "Air Bersih", desc: "10 liter air (hindari air kaporit/PDAM langsung)." }
                 ].map((bahan, i) => (
                   <li key={i} className="flex items-start gap-4">
-                    <div className="mt-1 bg-[#F7F8FA] rounded-full p-1 shrink-0">
+                    <div className="mt-1 bg-white rounded-full p-1 shadow-sm border border-gray-100 shrink-0">
                       <FiCheck className="text-[#79CF02] w-4 h-4" />
                     </div>
                     <div>
@@ -149,22 +286,17 @@ export default function PraktikPupukPage() {
       </div>
 
 
-      {/* ================= LANGKAH-LANGKAH ================= */}
-      <div className="w-full py-20 lg:py-28 bg-[#FFFFFF]">
-        {/* Diubah ke max-w-7xl */}
+      {/* ================= LANGKAH-LANGKAH (ABU-ABU) ================= */}
+      <div className="w-full py-20 lg:py-28 bg-[#F7F8FA]">
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           
-          <div className="mb-16 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#E9F5E1] rounded-full text-xs font-semibold mb-3 border border-[#79CF02]/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#79CF02]"></span>
-              <span className="text-[#559400]">Proses Pembuatan</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] mb-4">Langkah demi Langkah</h2>
+          <div className="mb-16 flex flex-col items-start text-left">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight mb-4">Langkah demi Langkah</h2>
             <p className="text-gray-500 text-lg">Ikuti tahapan visual berikut ini untuk memastikan proses fermentasi Anda berjalan sempurna.</p>
           </div>
 
           <div className="relative">
-            <div className="absolute left-6 md:left-8 top-2 bottom-2 w-0.5 bg-gray-100 transform -translate-x-1/2 z-0"></div>
+            <div className="absolute left-6 md:left-8 top-2 bottom-2 w-0.5 bg-gray-200 transform -translate-x-1/2 z-0"></div>
 
             {steps.map((step, index) => {
               const IconComponent = step.icon;
@@ -177,7 +309,7 @@ export default function PraktikPupukPage() {
                   key={step.id} 
                   className={`relative z-10 flex gap-6 md:gap-10 ${index !== steps.length - 1 ? 'mb-20' : ''}`}
                 >
-                  <div className="w-12 h-12 md:w-16 md:h-16 shrink-0 bg-[#F7F8FA] rounded-full border-4 border-white flex items-center justify-center font-bold text-lg md:text-xl text-gray-700 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
+                  <div className="w-12 h-12 md:w-16 md:h-16 shrink-0 bg-white rounded-full flex items-center justify-center font-bold text-lg md:text-xl text-gray-700 shadow-sm border border-gray-100">
                     {step.id}
                   </div>
 
@@ -190,9 +322,8 @@ export default function PraktikPupukPage() {
                       <p className="text-gray-500 text-base md:text-lg leading-relaxed">{step.details}</p>
                     </div>
 
-                    {/* Mengurangi sedikit lebar gambar (lg:w-[40%]) agar ruang teks lebih lega di resolusi lebar */}
                     <div className="w-full lg:w-[40%] shrink-0">
-                      <div className="w-full rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-100">
+                      <div className="w-full rounded-[2rem] overflow-hidden shadow-sm border border-gray-200">
                         <img 
                           src={step.image} 
                           alt={step.title} 
@@ -210,9 +341,8 @@ export default function PraktikPupukPage() {
       </div>
 
 
-      {/* ================= INDIKATOR KEBERHASILAN ================= */}
-      <div className="w-full py-20 lg:py-28 bg-[#F7F8FA]">
-        {/* Diubah ke max-w-7xl */}
+      {/* ================= INDIKATOR KEBERHASILAN (PUTIH) ================= */}
+      <div className="w-full py-20 lg:py-28 bg-[#FFFFFF]">
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeIn} className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">
@@ -269,9 +399,8 @@ export default function PraktikPupukPage() {
       </div>
 
 
-      {/* ================= PANDUAN APLIKASI ================= */}
-      <div className="bg-[#FFFFFF] w-full py-20 lg:py-28">
-        {/* Diubah ke max-w-7xl */}
+      {/* ================= PANDUAN APLIKASI (ABU-ABU) ================= */}
+      <div className="bg-[#F7F8FA] w-full py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeIn} className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">
@@ -325,6 +454,34 @@ export default function PraktikPupukPage() {
 
           </motion.div>
 
+        </div>
+      </div>
+
+
+      {/* ================= CALL TO ACTION (END OF JOURNEY - PUTIH) ================= */}
+      <div className="bg-[#FFFFFF] w-full py-20 lg:py-28 border-t border-gray-100">
+        <div className="max-w-4xl mx-auto px-6 sm:px-8 text-center">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
+            
+            <div className="w-16 h-16 bg-[#E9F5E1] rounded-full flex items-center justify-center mx-auto mb-8 border border-[#79CF02]/20">
+              <FiCheck className="w-8 h-8 text-[#559400]" />
+            </div>
+            
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111827] tracking-tight mb-6">
+              Saatnya Tangan Anda <br className="hidden sm:block" /> yang Bekerja
+            </h2>
+            
+            <p className="text-gray-500 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-10">
+              Perubahan besar dimulai dari pekarangan rumah. Mari bersama-sama wujudkan kemandirian pangan dan lestarikan alam dari desa kita.
+            </p>
+
+            <div className="flex justify-center">
+              <Link to="/" className="w-full sm:w-auto px-10 py-3.5 bg-[#111827] hover:bg-[#79CF02] text-white hover:text-[#111827] font-bold rounded-full transition-all duration-300 shadow-[0_8px_20px_rgba(0,0,0,0.12)] hover:shadow-xl focus:outline-none">
+                Kembali ke Beranda
+              </Link>
+            </div>
+            
+          </motion.div>
         </div>
       </div>
 

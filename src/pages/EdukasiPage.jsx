@@ -8,6 +8,7 @@ import {
 } from "react-icons/fi";
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '../components/Footer';
+import fotoButton from '../assets/foto_button_edukasi.jpg';
 
 export default function EdukasiPage() {
   const carouselRef = useRef(null);
@@ -31,6 +32,8 @@ export default function EdukasiPage() {
         if (!carousel) return;
         
         const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        
+        if (maxScroll <= 0) return; 
         
         if (carousel.scrollLeft >= maxScroll - 5) {
           autoScrollDirection.current = 'left';
@@ -148,7 +151,7 @@ export default function EdukasiPage() {
   };
 
   const navItems = [
-    { id: 'filosofi', label: 'Filosofi' },
+    { id: 'filosofi', label: 'Filosofi & Sejarah' },
     { id: 'manfaat', label: 'Manfaat' },
     { id: 'komparasi', label: 'Perbandingan' },
     { id: 'bahan', label: 'Bahan Baku' }
@@ -198,66 +201,106 @@ export default function EdukasiPage() {
       </div>
       {/* ================================================== */}
 
-      {/* ================= BAGIAN 1: PENGANTAR ================= */}
-      <div className="bg-[#E9F5E1] pt-12 md:pt-16 pb-20 overflow-hidden">
-        
+      {/* ================= BAGIAN 1: PENGANTAR (FILOSOFI & SEJARAH) ================= */}
+      <div className="bg-[#E9F5E1] pt-12 lg:pt-20 pb-20 lg:pb-32 overflow-hidden">
         <div className="px-6 sm:px-8 max-w-7xl mx-auto">
-          <section id="filosofi" className="scroll-mt-24 max-w-4xl mx-auto flex flex-col items-center text-center">
+          
+          <section id="filosofi" className="scroll-mt-24 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#79CF02]/15 rounded-full text-xs md:text-sm font-bold text-[#559400] mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#79CF02]"></span>
-                Tentang Filosofi Kami
+            {/* KIRI: Tipografi Rata Kiri */}
+            <div className="w-full lg:w-1/2 flex flex-col items-start text-left">
+              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#79CF02]/15 rounded-full text-xs md:text-sm font-bold text-[#559400] mb-6">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#79CF02]"></span>
+                  Sejarah & Filosofi
+                </div>
+              </motion.div>
+
+              <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold text-[#111827] tracking-tight leading-[1.1] mb-6">
+                Jejak Pertanian Alami & <br className="hidden lg:block" /> Lahirnya <span className="text-[#79CF02]">KSPS</span>
+              </motion.h2>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-gray-600 text-base md:text-lg max-w-xl leading-relaxed space-y-5 text-justify md:text-left">
+                <p>
+                  Perjalanan kemandirian pangan di Desa Salassae bermula pada tahun 2011, berbekal ilmu dan praktik bersama pakar pertanian alami, Dr. Cho Han Kyu. Semangat kolektif ini melahirkan Komunitas Swabina Pedesaan Salassae (KSPS) di tahun 2012, sebuah motor penggerak yang berhasil mengubah cara pandang petani. Masyarakat menyadari bahwa bertani bukanlah eksploitasi lahan demi keuntungan semata, melainkan merawat kehidupan lewat simbiosis mutualisme—di mana setiap makhluk hidup dihargai dan tanaman diberikan hak nutrisinya.
+                </p>
+                <p>
+                  Kesadaran ekologis ini diperkuat oleh fakta bahwa segala kebaikan nutrisi untuk tanaman telah disediakan oleh alam. Pendekatan KSPS sangat merakyat karena bahannya mudah diakses, mulai dari yang terhampar di pekarangan hingga sekadar memanfaatkan sisa bumbu dapur petani. Berkat konsistensi menjaga keseimbangan alam ini, KSPS kini telah tumbuh menjadi mercusuar inspirasi yang sukses membina dan mendampingi 45 desa di seluruh wilayah Kabupaten Bulukumba.
+                </p>
+              </motion.div>
+            </div>
+
+            {/* KANAN: Gambar Responsive (Bento Grid Tangga) */}
+            <div className="w-full lg:w-1/2 mt-4 lg:mt-0 relative">
+              
+              {/* 1. TAMPILAN MOBILE: CAROUSEL */}
+              <div className="block lg:hidden w-full relative">
+                <AnimatePresence>
+                  {canScrollLeft && (
+                    <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} onClick={() => scrollCarousel('left')} className="absolute left-2 top-[50%] -translate-y-1/2 z-10 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#111827] shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:bg-[#79CF02] active:scale-95 transition-all border border-gray-200 focus:outline-none">
+                      <FiChevronLeft className="text-xl pr-[2px]" />
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+                
+                <div ref={carouselRef} className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 pt-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory">
+                  {[
+                    "https://picsum.photos/800/600?nature,farm&random=1",
+                    "https://picsum.photos/800/600?nature,farm&random=2",
+                    "https://picsum.photos/800/600?nature,farm&random=3",
+                    "https://picsum.photos/800/600?nature,farm&random=4"
+                  ].map((img, i) => (
+                    <div key={i} className="snap-center shrink-0 w-[85%] sm:w-[65%] aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.08)] bg-white border border-gray-100">
+                      <img src={img} alt={`Sejarah ${i+1}`} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+
+                <AnimatePresence>
+                  {canScrollRight && (
+                    <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} onClick={() => scrollCarousel('right')} className="absolute right-2 top-[50%] -translate-y-1/2 z-10 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#111827] shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:bg-[#79CF02] active:scale-95 transition-all border border-gray-200 focus:outline-none">
+                      <FiChevronRight className="text-xl pl-[2px]" />
+                    </motion.button>
+                  )}
+                </AnimatePresence>
               </div>
-            </motion.div>
 
-            <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold text-[#111827] tracking-tight leading-[1.15] mb-6">
-              Membangun Kemandirian Desa <br className="hidden md:block" /> Melalui <span className="text-[#79CF02]">Pertanian Selaras Alam</span>
-            </motion.h2>
+              {/* 2. TAMPILAN DESKTOP: BENTO GRID TANGGA NAIK KE KANAN */}
+              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.3 }} className="hidden lg:grid grid-cols-2 gap-4 sm:gap-6 items-center">
+                
+                {/* Kolom Kiri: Di Bawah */}
+                <div className="flex flex-col gap-4 sm:gap-6 mt-16 lg:mt-24">
+                  <img 
+                    src="https://picsum.photos/800/600?nature,farm&random=1" 
+                    alt="Sejarah 1" 
+                    className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+                  />
+                  <img 
+                    src="https://picsum.photos/800/600?nature,farm&random=2" 
+                    alt="Sejarah 2" 
+                    className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+                  />
+                </div>
 
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-gray-600 text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-              Di Desa Salassae, kami percaya bahwa pertanian sejati bukan sekadar tentang memanen hasil bumi, melainkan memelihara kehidupan di dalamnya. Dengan memadukan kebijaksanaan leluhur dan pendekatan ekologis modern, kami berupaya mengembalikan kesuburan tanah tanpa bergantung pada bahan kimia buatan. Gerakan ini dirancang untuk menciptakan ketahanan pangan yang mandiri, melestarikan alam, dan memberikan dampak kesejahteraan yang nyata bagi komunitas petani kita.
-            </motion.p>
-            
+                {/* Kolom Kanan: Di Atas */}
+                <div className="flex flex-col gap-4 sm:gap-6 -mt-16 lg:-mt-24">
+                  <img 
+                    src="https://picsum.photos/800/600?nature,farm&random=3" 
+                    alt="Sejarah 3" 
+                    className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+                  />
+                  <img 
+                    src="https://picsum.photos/800/600?nature,farm&random=4" 
+                    alt="Sejarah 4" 
+                    className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+                  />
+                </div>
+
+              </motion.div>
+            </div>
+
           </section>
         </div>
-
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="w-full relative group mt-16">
-          <AnimatePresence>
-            {canScrollLeft && (
-              <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} onClick={() => scrollCarousel('left')} className="absolute left-4 md:left-8 top-[45%] -translate-y-1/2 z-10 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#111827] shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:bg-[#79CF02] hover:scale-110 active:scale-95 transition-all border border-gray-200 focus:outline-none">
-                <FiChevronLeft className="text-2xl pr-[2px]" />
-              </motion.button>
-            )}
-          </AnimatePresence>
-          
-          <div ref={carouselRef} className="flex gap-4 md:gap-6 overflow-x-auto pb-6 pt-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden px-6 md:px-12 snap-x snap-mandatory">
-            <div className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-[35%] lg:w-[28%] aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.08)] bg-gray-200">
-              <img src="https://picsum.photos/800/600?random=1" alt="Galeri Salassae 1" className="w-full h-full object-cover" />
-            </div>
-            <div className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-[35%] lg:w-[28%] aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.08)] bg-gray-200">
-              <img src="https://picsum.photos/800/600?random=2" alt="Galeri Salassae 2" className="w-full h-full object-cover" />
-            </div>
-            <div className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-[35%] lg:w-[28%] aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.08)] bg-gray-200">
-              <img src="https://picsum.photos/800/600?random=3" alt="Galeri Salassae 3" className="w-full h-full object-cover" />
-            </div>
-            <div className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-[35%] lg:w-[28%] aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.08)] bg-gray-200">
-              <img src="https://picsum.photos/800/600?random=4" alt="Galeri Salassae 4" className="w-full h-full object-cover" />
-            </div>
-            <div className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-[35%] lg:w-[28%] aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.08)] bg-gray-200">
-              <img src="https://picsum.photos/800/600?random=5" alt="Galeri Salassae 5" className="w-full h-full object-cover" />
-            </div>
-          </div>
-
-          <AnimatePresence>
-            {canScrollRight && (
-              <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} onClick={() => scrollCarousel('right')} className="absolute right-4 md:right-8 top-[45%] -translate-y-1/2 z-10 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#111827] shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:bg-[#79CF02] hover:scale-110 active:scale-95 transition-all border border-gray-200 focus:outline-none">
-                <FiChevronRight className="text-2xl pl-[2px]" />
-              </motion.button>
-            )}
-          </AnimatePresence>
-        </motion.div>
-
       </div>
 
 
@@ -266,18 +309,18 @@ export default function EdukasiPage() {
         <div className="px-6 sm:px-8 max-w-7xl mx-auto">
           <section id="manfaat" className="scroll-mt-24">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} custom={0} variants={cardVariants} className="md:w-[45%]">
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} custom={0} variants={cardVariants} className="md:w-[50%]">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#f0fdf4] rounded-full text-sm font-semibold mb-5 border border-[#79CF02]/20">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#79CF02]"></span>
-                  <span className="text-[#111827]">Kenapa Kami?</span>
+                  <span className="text-[#111827]">Manfaat Utama</span>
                 </div>
                 <h3 className="text-3xl md:text-4xl font-extrabold text-[#111827] tracking-tight leading-[1.15]">
-                  Mengapa Memilih <br className="hidden md:block" /> Pertanian Alami?
+                  Lebih dari Sekadar <br className="hidden md:block" /> Memanen Hasil Bumi
                 </h3>
               </motion.div>
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} custom={1} variants={cardVariants} className="md:w-[55%] md:pl-8 lg:pl-16">
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} custom={1} variants={cardVariants} className="md:w-[50%] md:pl-8 lg:pl-12">
                 <p className="text-gray-500 text-base md:text-lg leading-relaxed font-normal">
-                  Menyatukan kearifan lokal dan keberlanjutan ekosistem ke dalam satu pendekatan cerdas yang dirancang khusus untuk menciptakan kemandirian petani.
+                  Praktik pertanian alami di Desa Salassae membuktikan bahwa keberhasilan sejati tidak hanya diukur dari kuantitas hasil panen, melainkan dari transformasi menyeluruh pada manusianya.
                 </p>
               </motion.div>
             </div>
@@ -285,29 +328,31 @@ export default function EdukasiPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
               <motion.div custom={2} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="flex flex-col items-start">
                 <div className="w-12 h-12 bg-[#E9F5E1] rounded-full flex items-center justify-center mb-5 border border-[#79CF02]/20">
-                  <FiRefreshCcw className="w-5 h-5 text-[#559400]" />
-                </div>
-                <h4 className="text-xl font-bold text-[#111827] mb-3">Pemulihan Ekologi</h4>
-                <p className="text-gray-500 text-sm md:text-base leading-relaxed">
-                  Mengembalikan cacing, jamur baik, dan mikroba yang selama ini mati akibat pestisida untuk tanah yang sehat.
-                </p>
-              </motion.div>
-              <motion.div custom={3} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="flex flex-col items-start">
-                <div className="w-12 h-12 bg-[#E9F5E1] rounded-full flex items-center justify-center mb-5 border border-[#79CF02]/20">
                   <FiTrendingUp className="w-5 h-5 text-[#559400]" />
                 </div>
-                <h4 className="text-xl font-bold text-[#111827] mb-3">Kemandirian Ekonomi</h4>
+                <h4 className="text-xl font-bold text-[#111827] mb-3">Peningkatan Kapasitas SDM</h4>
                 <p className="text-gray-500 text-sm md:text-base leading-relaxed">
-                  Gunakan sumber daya sekitar untuk menekan biaya produksi dan memaksimalkan nilai jual hasil panen.
+                  Membangun tiga pilar utama petani: sikap yang tangguh, pengetahuan yang luas, dan keahlian praktis (skill) dalam meracik nutrisi serta mikroorganisme secara mandiri.
                 </p>
               </motion.div>
+              
+              <motion.div custom={3} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="flex flex-col items-start">
+                <div className="w-12 h-12 bg-[#E9F5E1] rounded-full flex items-center justify-center mb-5 border border-[#79CF02]/20">
+                  <FiRefreshCcw className="w-5 h-5 text-[#559400]" />
+                </div>
+                <h4 className="text-xl font-bold text-[#111827] mb-3">Perubahan Sikap Ekologis</h4>
+                <p className="text-gray-500 text-sm md:text-base leading-relaxed">
+                  Tanpa ketergantungan pada bahan kimiawi, pandangan petani terhadap lahan berubah. Tanah tidak lagi dieksploitasi, melainkan dirawat dan dihormati sebagai sumber kehidupan.
+                </p>
+              </motion.div>
+              
               <motion.div custom={4} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="flex flex-col items-start">
                 <div className="w-12 h-12 bg-[#E9F5E1] rounded-full flex items-center justify-center mb-5 border border-[#79CF02]/20">
                   <FiShield className="w-5 h-5 text-[#559400]" />
                 </div>
-                <h4 className="text-xl font-bold text-[#111827] mb-3">Kesehatan Terjaga</h4>
+                <h4 className="text-xl font-bold text-[#111827] mb-3">Simbiosis Mutualisme</h4>
                 <p className="text-gray-500 text-sm md:text-base leading-relaxed">
-                  Menghasilkan produk pangan yang murni, bebas dari residu kimia beracun, dengan nilai gizi yang jauh lebih tinggi.
+                  Mengajarkan kita untuk saling menghargai. Bukan hanya petani yang meraup untung, tetapi tanaman diberikan hak nutrisinya dan seluruh ekosistem diperlakukan dengan pantas.
                 </p>
               </motion.div>
             </div>
@@ -380,7 +425,7 @@ export default function EdukasiPage() {
       </div>
 
 
-      {/* ================= BAGIAN 4: BAHAN (PERUBAHAN IKON SEPERTI MANFAAT) ================= */}
+      {/* ================= BAGIAN 4: BAHAN (KATALOG BAHAN NPK) ================= */}
       <div className="w-full bg-[#FFFFFF] py-16 lg:py-28">
         <div className="px-6 sm:px-8 max-w-7xl mx-auto">
           <section id="bahan" className="scroll-mt-24">
@@ -401,49 +446,49 @@ export default function EdukasiPage() {
                   <span className="text-[#559400]">Katalog Bahan</span>
                 </div>
                 <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111827] tracking-tight mb-5 leading-[1.1]">
-                  Harta Karun <br className="hidden lg:block"/> di Sekitar Kita
+                  Substitusi Pupuk <br className="hidden lg:block"/> dari Pekarangan
                 </h3>
                 <p className="text-gray-500 text-base md:text-lg leading-relaxed">
-                  Berikut adalah tiga kelompok bahan utama yang sangat mudah ditemukan di lingkungan Desa Salassae untuk meracik pupuk alami berkualitas tinggi.
+                  Mengapa Salassae memilih pertanian alami? Karena seluruh bahan pembuatannya sangat mudah diakses—mulai dari sisa dapur, rebung bambu untuk pupuk, hingga bumbu dapur seperti jahe dan bawang putih untuk pestisida herbal.
                 </p>
               </motion.div>
 
               {/* SISI KANAN: Daftar Kartu Bahan Bertumpuk */}
               <div className="w-full lg:w-[65%] flex flex-col gap-4 md:gap-5">
                 
-                {/* KARTU 1 (Ikon diperbarui persis seperti bagian Manfaat) */}
+                {/* KARTU 1 (Nitrogen) */}
                 <motion.div custom={1} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="bg-[#F7F8FA] p-6 md:p-8 rounded-[2rem] border border-transparent flex flex-col sm:flex-row gap-5 md:gap-6 items-start">
                   <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
                     <FiWind className="w-6 h-6 md:w-7 md:h-7 text-[#559400]" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-[#111827] mb-2">Unsur Hijau (Nitrogen)</h4>
-                    <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Mempercepat pertumbuhan daun dan tunas baru pada fase vegetatif tanaman.</p>
-                    <p className="text-sm font-semibold text-[#79CF02]">Contoh: Daun gamal, lamtoro, sisa sayuran segar.</p>
+                    <h4 className="text-xl font-bold text-[#111827] mb-2">Nitrogen (Pengganti Urea)</h4>
+                    <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Memenuhi kebutuhan nutrisi utama daun dan memacu pertumbuhan fisik pada fase awal (vegetatif) tanaman.</p>
+                    <p className="text-sm font-semibold text-[#79CF02]">Contoh: Memanfaatkan ekstrak ikan laut/sungai yang difermentasi bersama gula merah.</p>
                   </div>
                 </motion.div>
 
-                {/* KARTU 2 */}
+                {/* KARTU 2 (Fosfor) */}
                 <motion.div custom={2} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="bg-[#F7F8FA] p-6 md:p-8 rounded-[2rem] border border-transparent flex flex-col sm:flex-row gap-5 md:gap-6 items-start">
                   <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
                     <FiSun className="w-6 h-6 md:w-7 md:h-7 text-[#559400]" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-[#111827] mb-2">Unsur Cokelat (Karbon)</h4>
-                    <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Memberi energi berkelanjutan bagi mikroba tanah, memperkuat batang, dan menjaga porositas tanah.</p>
-                    <p className="text-sm font-semibold text-[#79CF02]">Contoh: Sekam padi, jerami, serbuk gergaji kering.</p>
+                    <h4 className="text-xl font-bold text-[#111827] mb-2">Fosfor (Pengganti TSP/Pupuk Hitam)</h4>
+                    <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Berfungsi untuk merangsang pertumbuhan sel akar serta memperbanyak pembentukan bunga dan buah pada tanaman.</p>
+                    <p className="text-sm font-semibold text-[#79CF02]">Contoh: Diramu dari jantung pisang atau buah pepaya mentah yang dicampur dengan gula merah.</p>
                   </div>
                 </motion.div>
 
-                {/* KARTU 3 */}
+                {/* KARTU 3 (Kalium) */}
                 <motion.div custom={3} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={cardVariants} className="bg-[#F7F8FA] p-6 md:p-8 rounded-[2rem] border border-transparent flex flex-col sm:flex-row gap-5 md:gap-6 items-start">
                   <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 bg-[#E9F5E1] rounded-full flex items-center justify-center border border-[#79CF02]/20">
                     <FiDroplet className="w-6 h-6 md:w-7 md:h-7 text-[#559400]" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-[#111827] mb-2">Starter (Dekomposer)</h4>
-                    <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Bahan pemicu yang berisi bakteri baik dan makanan nutrisi awal untuk mempercepat proses fermentasi.</p>
-                    <p className="text-sm font-semibold text-[#79CF02]">Contoh: Air cucian beras, molase (gula cair), larutan EM4.</p>
+                    <h4 className="text-xl font-bold text-[#111827] mb-2">Kalium (Pengganti KCl)</h4>
+                    <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-3">Berperan vital dalam menguatkan tekstur batang dan akar tanaman, serta meningkatkan daya tahan dari serangan penyakit.</p>
+                    <p className="text-sm font-semibold text-[#79CF02]">Contoh: Fermentasi rebung bambu, cangkang telur dengan cuka aren, atau ekstrak buah masak.</p>
                   </div>
                 </motion.div>
 
@@ -471,7 +516,7 @@ export default function EdukasiPage() {
             </div>
 
             <div className="relative w-full aspect-[4/5] md:aspect-[21/9] rounded-[2rem] overflow-hidden shadow-2xl">
-              <img src="https://picsum.photos/1920/1080?nature&random=12" alt="Persiapan Praktik" className="absolute inset-0 w-full h-full object-cover" />
+              <img src={fotoButton} alt="Persiapan Praktik" className="absolute inset-0 w-full h-full object-cover" />
               
               <div className="absolute inset-0 bg-black/10"></div>
 
