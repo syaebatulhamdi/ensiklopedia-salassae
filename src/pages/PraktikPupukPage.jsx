@@ -381,11 +381,6 @@ export default function PraktikPupukPage() {
                     {step.id}
                   </div>
 
-                  {/* KONTINER UTAMA (FLEX-WRAP & ORDERING) */}
-                  {/* Penjelasan Trik:
-                      - Pada HP (flex-col): Teks di atas (order-1), Detail di tengah (order-2), Gambar di bawah (order-3).
-                      - Pada Laptop (flex-row flex-wrap): Teks di kiri (order-1), Gambar di kanan (order-2), Detail meluas di bawahnya (order-3 w-full).
-                  */}
                   <div className="flex-1 flex flex-col lg:flex-row lg:flex-wrap w-full pt-1 md:pt-2">
                     
                     {/* 1. BAGIAN TEKS UTAMA */}
@@ -460,13 +455,13 @@ export default function PraktikPupukPage() {
                       )}
                     </AnimatePresence>
 
-                    {/* 3. BAGIAN GAMBAR */}
+                    {/* 3. BAGIAN GAMBAR (TANPA PADDING PUTIH) */}
                     <div className="order-3 lg:order-2 w-full lg:w-[40%] shrink-0">
-                      <div className="w-full rounded-[2rem] overflow-hidden shadow-sm border border-gray-200 bg-white p-2">
+                      <div className="w-full rounded-[2rem] overflow-hidden shadow-sm border border-gray-200">
                         <img 
                           src={step.image} 
                           alt={step.title} 
-                          className="w-full h-auto aspect-video md:aspect-[4/3] lg:aspect-auto lg:h-64 object-cover rounded-[1.5rem] hover:scale-105 transition-transform duration-700" 
+                          className="w-full h-auto aspect-video md:aspect-[4/3] lg:aspect-auto lg:h-64 object-cover hover:scale-105 transition-transform duration-700" 
                         />
                       </div>
                     </div>
