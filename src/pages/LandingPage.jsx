@@ -30,7 +30,7 @@ export default function LandingPage() {
         </motion.h1>
         
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }} className="mt-6 text-gray-300 text-base md:text-lg font-normal leading-relaxed max-w-xl">
-          Panduan digital pertanian alami dan peternakan terintegrasi. Pelajari cara meracik pupuk organik dan pakan ternak secara mandiri.
+          Panduan Digital Pertanian Alami sebagai Sarana Edukasi dalam Meningkatkan Pemahaman tentang Budidaya Ramah Lingkungan
         </motion.p>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }} className="mt-10">

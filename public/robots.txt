@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ensiklopedia-salassae.vercel.app/sitemap.xml
