@@ -6,6 +6,12 @@ import {
 } from "react-icons/fi";
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '../components/Footer';
+import gallery1 from '../assets/ayam.jpeg';
+import gallery2 from '../assets/sawah2.jpg';
+import gallery3 from '../assets/pupuk2.jpg';
+import gallery4 from '../assets/sapi.jpeg';
+
+
 
 export default function PraktikPupukPage() {
   const carouselRef = useRef(null);
@@ -237,10 +243,10 @@ export default function PraktikPupukPage() {
               
               <div ref={carouselRef} className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 pt-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory">
                 {[
-                  "https://picsum.photos/800/600?farm,green",
-                  "https://picsum.photos/800/600?leaves,texture",
-                  "https://picsum.photos/800/600?farmer,hands",
-                  "https://picsum.photos/800/600?nature,field"
+                  gallery2,
+                  gallery1,
+                  gallery4,
+                  gallery3
                 ].map((img, i) => (
                   <div key={i} className="snap-center shrink-0 w-[85%] sm:w-[65%] aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.08)] bg-white border border-gray-100">
                     <img src={img} alt={`Pertanian ${i+1}`} className="w-full h-full object-cover" />
@@ -261,13 +267,13 @@ export default function PraktikPupukPage() {
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.3 }} className="hidden lg:grid grid-cols-2 gap-4 sm:gap-6 items-center">
               
               <div className="flex flex-col gap-4 sm:gap-6 mt-16 lg:mt-24">
-                <img src="https://picsum.photos/800/600?farm,green" alt="Pertanian 1" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
-                <img src="https://picsum.photos/800/600?leaves,texture" alt="Pertanian 2" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
+                <img src={gallery1} alt="Pertanian 1" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
+                <img src={gallery2} alt="Pertanian 2" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
               </div>
 
               <div className="flex flex-col gap-4 sm:gap-6 -mt-16 lg:-mt-24">
-                <img src="https://picsum.photos/800/600?farmer,hands" alt="Pertanian 3" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
-                <img src="https://picsum.photos/800/600?nature,field" alt="Pertanian 4" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
+                <img src={gallery3} alt="Pertanian 3" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
+                <img src={gallery4} alt="Pertanian 4" className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"/>
               </div>
 
             </motion.div>

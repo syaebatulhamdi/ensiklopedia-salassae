@@ -9,6 +9,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '../components/Footer';
 import fotoButton from '../assets/foto_button_edukasi.jpg';
+import gallery1 from '../assets/sawah.jpeg';
+import gallery2 from '../assets/ksps.jpeg';
+import gallery3 from '../assets/kandang.jpeg';
+import gallery4 from '../assets/ayam.jpeg';
 
 export default function EdukasiPage() {
   const carouselRef = useRef(null);
@@ -245,10 +249,10 @@ export default function EdukasiPage() {
                 
                 <div ref={carouselRef} className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 pt-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory">
                   {[
-                    "https://picsum.photos/800/600?nature,farm&random=1",
-                    "https://picsum.photos/800/600?nature,farm&random=2",
-                    "https://picsum.photos/800/600?nature,farm&random=3",
-                    "https://picsum.photos/800/600?nature,farm&random=4"
+                    gallery1,
+                    gallery2,
+                    gallery3,
+                    gallery4
                   ].map((img, i) => (
                     <div key={i} className="snap-center shrink-0 w-[85%] sm:w-[65%] aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.08)] bg-white border border-gray-100">
                       <img src={img} alt={`Sejarah ${i+1}`} className="w-full h-full object-cover" />
@@ -271,12 +275,12 @@ export default function EdukasiPage() {
                 {/* Kolom Kiri: Di Bawah */}
                 <div className="flex flex-col gap-4 sm:gap-6 mt-16 lg:mt-24">
                   <img 
-                    src="https://picsum.photos/800/600?nature,farm&random=1" 
+                    src={gallery2} 
                     alt="Sejarah 1" 
                     className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
                   />
                   <img 
-                    src="https://picsum.photos/800/600?nature,farm&random=2" 
+                    src={gallery3}
                     alt="Sejarah 2" 
                     className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
                   />
@@ -285,12 +289,12 @@ export default function EdukasiPage() {
                 {/* Kolom Kanan: Di Atas */}
                 <div className="flex flex-col gap-4 sm:gap-6 -mt-16 lg:-mt-24">
                   <img 
-                    src="https://picsum.photos/800/600?nature,farm&random=3" 
+                    src={gallery1}
                     alt="Sejarah 3" 
                     className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
                   />
                   <img 
-                    src="https://picsum.photos/800/600?nature,farm&random=4" 
+                    src={gallery4}
                     alt="Sejarah 4" 
                     className="w-full aspect-[4/3] object-cover rounded-2xl sm:rounded-[2rem] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
                   />
